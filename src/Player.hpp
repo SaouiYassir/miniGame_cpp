@@ -1,25 +1,29 @@
 #ifndef Player_hpp
 #define Player_hpp
+#include <iostream>
 #include <SFML/Graphics.hpp>
 
-unsing namespace sf;
+using namespace sf;
+using namespace std;
 
 class Player {
 
 private:
-    Sprite sprite;
+    RectangleShape rect;
     float velocityY;
     bool jumping;
     bool crouching;
     int health;
 
 public:
+    Player();
     void move();
     void jump();
     void crouch();
     void update();
-    sf::FloatRect getBounds();
+    FloatRect getBounds();
+    void render(RenderWindow& window);
 
-}
+};
 
 #endif
