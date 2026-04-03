@@ -25,3 +25,7 @@ void Player::update() {
         rect.move(0.f, -5.f);
     }
 }
+
+void Player::move() {}
+void Player::jump() {}
+sf::FloatRect Player::getBounds() { return sprite.getGlobalBounds(); }
