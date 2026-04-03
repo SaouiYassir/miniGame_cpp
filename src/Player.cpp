@@ -28,4 +28,4 @@ void Player::update() {
 
 void Player::move() {}
 void Player::jump() {}
-sf::FloatRect Player::getBounds() { return sprite.getGlobalBounds(); }
+sf::FloatRect Player::getBounds() { return rect.getGlobalBounds(); }

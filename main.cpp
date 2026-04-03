@@ -19,13 +19,11 @@ int main() {
         }
 
         player.update();
-        window.clear(Color::Black);
+        window.clear();
         player.render(window);
         window.display();
 
     }
-
-
 
     return 0;
 
