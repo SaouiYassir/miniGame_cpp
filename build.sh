@@ -1,1 +1,1 @@
-g++ main.cpp -o test -lsfml-graphics -lsfml-window -lsfml-system
+g++ main.cpp -o test -lsfml-graphics -lsfml-window -lsfml-syste
