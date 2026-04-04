@@ -6,7 +6,7 @@ using namespace std;
 using namespace sf;
 
 int main() {
-
+    
     RenderWindow window(VideoMode(800, 600), "SFML Game");
     window.setFramerateLimit(60);
 
