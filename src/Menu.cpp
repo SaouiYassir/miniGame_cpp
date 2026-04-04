@@ -4,6 +4,16 @@
 using namespace sf;
 
 Menu::Menu(float width, float height) {
+
+    float screenWidth = 1300;
+    float screenHeight = 1000;
+    float buttonWidth = 300;
+    float buttonHeight = 120;
+    float spacing = 20;
+
+    float xPos = (screenWidth - buttonWidth) / 2;
+    float centerY = (screenHeight - buttonHeight) / 2;
+
     if (!font.loadFromFile("assets/fonts/font1.ttf")) {
         std::cout << "Error loading font" << std::endl;
     }
@@ -17,41 +27,41 @@ Menu::Menu(float width, float height) {
     }
 
     // --- PLAY BUTTON ---
-    playButton.setSize(Vector2f(200, 60));
+    playButton.setSize(Vector2f(buttonWidth, buttonHeight));
     playButton.setFillColor(Color(30, 30, 30, 180));
-    playButton.setPosition(Vector2f(width / 2 , height / 2 - 100));
+    playButton.setPosition(Vector2f(xPos, centerY - buttonHeight - spacing));
 
     playText.setFont(font);
     playText.setString("PLAY");
-    playText.setCharacterSize(30);
+    playText.setCharacterSize(45);
     FloatRect pRect = playText.getLocalBounds();
     playText.setOrigin(pRect.left + pRect.width / 2.0f, pRect.top + pRect.height / 2.0f);
-    playText.setPosition(playButton.getPosition().x + 100, playButton.getPosition().y + 30);
+    playText.setPosition(playButton.getPosition().x + (buttonWidth / 2), playButton.getPosition().y + (buttonHeight/2));
 
     // --- ABOUT BUTTON ---
-    aboutButton.setSize(Vector2f(200, 60));
+    aboutButton.setSize(Vector2f(buttonWidth, buttonHeight));
     aboutButton.setFillColor(Color(30, 30, 30, 180));
-    aboutButton.setPosition(Vector2f(width / 2 , height / 2));
+    aboutButton.setPosition(Vector2f(xPos, centerY));
 
     aboutText.setFont(font);
     aboutText.setString("ABOUT GAME");
-    aboutText.setCharacterSize(30);
+    aboutText.setCharacterSize(45);
     FloatRect aRect = aboutText.getLocalBounds();
     aboutText.setOrigin(aRect.left + aRect.width / 2.0f, aRect.top + aRect.height / 2.0f);
-    aboutText.setPosition(aboutButton.getPosition().x + 100, aboutButton.getPosition().y + 30);
+    aboutText.setPosition(aboutButton.getPosition().x + (buttonWidth / 2), aboutButton.getPosition().y + (buttonHeight/2));
 
 
     // --- QUIT BUTTON ---
-    quitButton.setSize(Vector2f(200, 60));
+    quitButton.setSize(Vector2f(buttonWidth, buttonHeight));
     quitButton.setFillColor(Color(30, 30, 30, 180));
-    quitButton.setPosition(Vector2f(width / 2 , height / 2 + 100));
+    quitButton.setPosition(Vector2f(xPos, centerY + buttonHeight + spacing));
 
     quitText.setFont(font);
     quitText.setString("QUIT");
-    quitText.setCharacterSize(30);
+    quitText.setCharacterSize(45);
     FloatRect qRect = quitText.getLocalBounds();
     quitText.setOrigin(qRect.left + qRect.width / 2.0f, qRect.top + qRect.height / 2.0f);
-    quitText.setPosition(quitButton.getPosition().x + 100, quitButton.getPosition().y + 30);
+    quitText.setPosition(quitButton.getPosition().x + (buttonWidth / 2), quitButton.getPosition().y + (buttonHeight/2));
 
     menuSprite.setTexture(menuTexture);
     menuSprite.setPosition(0, 0);

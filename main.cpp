@@ -10,12 +10,15 @@
 enum GameState { MENU_STATE, GAMEPLAY_STATE, ABOUT_STATE };
 
 int main() {
+    int windowWidth = 1300;
+    int windowHeight = 1000;
+
     std::srand(static_cast<unsigned>(std::time(nullptr)));
-    sf::RenderWindow window(sf::VideoMode(1000, 800), "SFML Game Linux");
+    sf::RenderWindow window(sf::VideoMode(windowWidth, windowHeight), "SFML Game Linux");
     window.setFramerateLimit(60);
 
     GameState state = MENU_STATE;
-    Menu menu(800, 600); 
+    Menu menu(windowWidth, windowHeight); 
     Player player;
     std::vector<Obstacle> obstacles;
     sf::Clock spawnTimer;
@@ -34,7 +37,7 @@ int main() {
     timerText.setFont(font);
     timerText.setCharacterSize(60); 
     timerText.setFillColor(sf::Color::Blue);
-    timerText.setPosition(820, 15); 
+    timerText.setPosition(windowWidth - 200, 20); 
     // ---------------------------------------
 
     while (window.isOpen()) {

@@ -8,6 +8,13 @@ using namespace sf;
 
 class Menu {
 private:
+    float screenWidth;
+    float screenHeight;
+    float buttonWidth;
+    float buttonHeight;
+    float spacing;
+    float xPos;
+    float centerY;
     Texture menuTexture;
     Sprite menuSprite;
     RectangleShape playButton;
