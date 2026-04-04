@@ -1,14 +1,14 @@
 #include "Menu.hpp"
-#include <iostream> // Added for std::cout
+#include <iostream> 
 
-using namespace sf; // Added so you don't have to write sf:: before everything
+using namespace sf;
 
 Menu::Menu(float width, float height) {
     if (!font.loadFromFile("assets/fonts/font1.ttf")) {
         std::cout << "Error loading font" << std::endl;
     }
 
-    if (!aboutTexture.loadFromFile("assets/imgs/testImage.jpg")) {
+    if (!aboutTexture.loadFromFile("assets/imgs/aboutBackground.png")) {
         std::cout << "Error loading image" << std::endl;
     }
 
@@ -55,11 +55,6 @@ Menu::Menu(float width, float height) {
 
 void Menu::update(RenderWindow& window) {
     Vector2f mousePos = window.mapPixelToCoords(Mouse::getPosition(window));
-
-    // Hover effects
-    playButton.setFillColor(playButton.getGlobalBounds().contains(mousePos) ? Color::Cyan : Color::Blue);
-    aboutButton.setFillColor(aboutButton.getGlobalBounds().contains(mousePos) ? Color::Cyan : Color::Blue);
-    quitButton.setFillColor(quitButton.getGlobalBounds().contains(mousePos) ? Color::Red : Color::Blue);
 }
 
 int Menu::handleInput(RenderWindow& window, Event& event) {
