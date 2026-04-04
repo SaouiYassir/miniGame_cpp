@@ -1,1 +1,1 @@
-g++ main.cpp src/Player.cpp -o test -lsfml-graphics -lsfml-window -lsfml-system
+g++ main.cpp src/Player.cpp src/Obstacle.cpp -o test -lsfml-graphics -lsfml-window -lsfml-system
