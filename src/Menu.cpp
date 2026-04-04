@@ -18,7 +18,7 @@ Menu::Menu(float width, float height) {
 
     // --- PLAY BUTTON ---
     playButton.setSize(Vector2f(200, 60));
-    playButton.setFillColor(Color::Blue);
+    playButton.setFillColor(Color(30, 30, 30, 180));
     playButton.setPosition(Vector2f(width / 2 , height / 2 - 100));
 
     playText.setFont(font);
@@ -30,7 +30,7 @@ Menu::Menu(float width, float height) {
 
     // --- ABOUT BUTTON ---
     aboutButton.setSize(Vector2f(200, 60));
-    aboutButton.setFillColor(Color::Green);
+    aboutButton.setFillColor(Color(30, 30, 30, 180));
     aboutButton.setPosition(Vector2f(width / 2 , height / 2));
 
     aboutText.setFont(font);
@@ -43,7 +43,7 @@ Menu::Menu(float width, float height) {
 
     // --- QUIT BUTTON ---
     quitButton.setSize(Vector2f(200, 60));
-    quitButton.setFillColor(Color::Red);
+    quitButton.setFillColor(Color(30, 30, 30, 180));
     quitButton.setPosition(Vector2f(width / 2 , height / 2 + 100));
 
     quitText.setFont(font);
