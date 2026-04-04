@@ -8,8 +8,12 @@ Menu::Menu(float width, float height) {
         std::cout << "Error loading font" << std::endl;
     }
 
+    if (!menuTexture.loadFromFile("assets/imgs/menuBackground.png")) {
+        std::cout << "Error loading menu image" << std::endl;
+    }
+
     if (!aboutTexture.loadFromFile("assets/imgs/aboutBackground.png")) {
-        std::cout << "Error loading image" << std::endl;
+        std::cout << "Error loading about image" << std::endl;
     }
 
     // --- PLAY BUTTON ---
@@ -49,6 +53,9 @@ Menu::Menu(float width, float height) {
     quitText.setOrigin(qRect.left + qRect.width / 2.0f, qRect.top + qRect.height / 2.0f);
     quitText.setPosition(quitButton.getPosition().x + 100, quitButton.getPosition().y + 30);
 
+    menuSprite.setTexture(menuTexture);
+    menuSprite.setPosition(0, 0);
+
     aboutSprite.setTexture(aboutTexture);
     aboutSprite.setPosition(0, 0);
 }
@@ -69,6 +76,7 @@ int Menu::handleInput(RenderWindow& window, Event& event) {
 }
 
 void Menu::draw(RenderWindow& window) {
+    window.draw(menuSprite);
     window.draw(playButton);
     window.draw(playText);
     window.draw(aboutButton);

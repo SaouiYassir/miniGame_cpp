@@ -4,24 +4,28 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 
+using namespace sf;
+
 class Menu {
 private:
-    sf::RectangleShape playButton;
-    sf::Text playText;
-    sf::RectangleShape aboutButton;
-    sf::Text aboutText;
-    sf::Texture aboutTexture;
-    sf::Sprite aboutSprite;
-    sf::RectangleShape quitButton;
-    sf::Text quitText;
-    sf::Font font;
+    Texture menuTexture;
+    Sprite menuSprite;
+    RectangleShape playButton;
+    Text playText;
+    RectangleShape aboutButton;
+    Text aboutText;
+    Texture aboutTexture;
+    Sprite aboutSprite;
+    RectangleShape quitButton;
+    Text quitText;
+    Font font;
 
 public:
     Menu(float width, float height);
-    void draw(sf::RenderWindow& window);
-    void drawAbout(sf::RenderWindow& window);
-    void update(sf::RenderWindow& window);
-    int handleInput(sf::RenderWindow& window, sf::Event& event); // Must be int
+    void draw(RenderWindow& window);
+    void drawAbout(RenderWindow& window);
+    void update(RenderWindow& window);
+    int handleInput(RenderWindow& window, Event& event); // Must be int
 };
 
 #endif
