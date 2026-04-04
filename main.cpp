@@ -1,80 +1,77 @@
-#include <iostream>
+#include <SFML/Graphics.hpp>
 #include <vector>
 #include <ctime>
-#include <SFML/Graphics.hpp>
 #include "src/Player.hpp"
 #include "src/Obstacle.hpp"
+#include "src/Menu.hpp"
 
-using namespace sf;
+enum GameState { MENU_STATE, GAMEPLAY_STATE, ABOUT_STATE };
 
 int main() {
-    // Initialisation du hasard
     std::srand(static_cast<unsigned>(std::time(nullptr)));
-
-    // Fenêtre de jeu
-    RenderWindow window(VideoMode(800, 600), "SFML Runner - Game");
+    sf::RenderWindow window(sf::VideoMode(1000, 800), "SFML Mini-Game");
     window.setFramerateLimit(60);
 
-    // Instances
+    GameState state = MENU_STATE;
+    Menu menu(800, 600);
     Player player;
     std::vector<Obstacle> obstacles;
-    
-    // Gestion du temps pour les obstacles
-    Clock chronoApparition;
-    float delaiSpawn = 1.5f;
+    sf::Clock spawnTimer;
 
     while (window.isOpen()) {
-        Event event;
+        sf::Event event;
         while (window.pollEvent(event)) {
-            if (event.type == Event::Closed) 
-                window.close();
-        }
+            if (event.type == sf::Event::Closed) window.close();
 
-        // 1. LOGIQUE DE GÉNÉRATION (SPAWN)
-        if (chronoApparition.getElapsedTime().asSeconds() > delaiSpawn) {
-            // Alternance aléatoire entre obstacle haut et bas
-            bool typeAleatoire = (std::rand() % 2 == 1);
-            
-            // Ajout d'un nouvel obstacle (vitesse de 6.5f par défaut)
-            obstacles.push_back(Obstacle(typeAleatoire, 6.5f));
-            
-            chronoApparition.restart();
-        }
-
-        // 2. MISE À JOUR DU JOUEUR
-        player.update();
-
-        // 3. MISE À JOUR DES OBSTACLES & COLLISIONS
-        for (size_t i = 0; i < obstacles.size(); i++) {
-            obstacles[i].update(); // Déplacement
-
-            // Test de collision
-            // On utilise getGlobalBounds() car c'est la méthode standard de SFML
-            if (player.getBounds().intersects(obstacles[i].getBounds())) {
-                std::cout << "Game Over!" << std::endl;
-                window.close(); 
-            }
-
-            // Nettoyage : si l'obstacle sort de l'écran à gauche
-            if (obstacles[i].getBounds().left + obstacles[i].getBounds().width < 0) {
-                obstacles.erase(obstacles.begin() + i);
-                i--; // Ajuste l'index suite à la suppression
+            // --- INPUT HANDLING ---
+            if (state == MENU_STATE) {
+                int selection = menu.handleInput(window, event);
+                if (selection == 1) {
+                    state = GAMEPLAY_STATE;
+                    obstacles.clear();
+                    spawnTimer.restart();
+                } else if (selection == 2) {
+                    state = ABOUT_STATE;
+                }
+            } 
+            // Press Escape to return to menu from anywhere
+            else if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape) {
+                state = MENU_STATE;
             }
         }
 
-        // 4. RENDU (AFFICHAGE)
         window.clear();
 
-        // On dessine le joueur
-        player.render(window); 
+        if (state == MENU_STATE) {
+            menu.update(window);
+            menu.draw(window);
+        } 
+        else if (state == ABOUT_STATE) {
+            menu.drawAbout(window); // Show the image
+        } 
+        else if (state == GAMEPLAY_STATE) {
+            // Gameplay Logic
+            if (spawnTimer.getElapsedTime().asSeconds() > 1.5f) {
+                obstacles.push_back(Obstacle(std::rand() % 2, 6.5f));
+                spawnTimer.restart();
+            }
 
-        // On dessine tous les obstacles
-        for (auto& obs : obstacles) {
-            obs.render(window); 
+            player.update();
+            player.render(window);
+
+            for (size_t i = 0; i < obstacles.size(); i++) {
+                obstacles[i].update();
+                obstacles[i].render(window);
+
+                if (player.getBounds().intersects(obstacles[i].getBounds())) {
+                    state = MENU_STATE; 
+                }
+                if (obstacles[i].getBounds().left + obstacles[i].getBounds().width < 0) {
+                    obstacles.erase(obstacles.begin() + i--);
+                }
+            }
         }
-
         window.display();
     }
-
     return 0;
 }
