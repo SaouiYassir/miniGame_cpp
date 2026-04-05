@@ -6,11 +6,12 @@
 #include "src/Obstacle.hpp"
 #include "src/Menu.hpp"
 #include "src/Timer.hpp"
+#include "src/Background.hpp" // Ajout de la nouvelle classe
 
 enum GameState { MENU_STATE, GAMEPLAY_STATE, ABOUT_STATE };
 
 int main() {
-    // Dimensions de la fenêtre
+    // Dimensions de la fenêtre (inchangées)
     int windowWidth = 1300;
     int windowHeight = 1000;
 
@@ -24,26 +25,23 @@ int main() {
     std::vector<Obstacle> obstacles;
     sf::Clock spawnTimer;
 
+    // --- INITIALISATION DU BACKGROUND ET VARIABLES DE NIVEAU ---
+    Background background;
+    float vitesseActuelle = 6.5f; // Vitesse initiale (Niveau 1)
+    // -----------------------------------------------------------
+
     Timer gameTimer;
     sf::Font font;
     sf::Text timerText;
 
-    
-    // On essaie plusieurs chemins pour trouver la police
-    bool fontLoaded = false;
-    if (font.loadFromFile("arial.ttf")) fontLoaded = true;
-    else if (font.loadFromFile("C:/Windows/Fonts/arial.ttf")) fontLoaded = true;
-    else if (font.loadFromFile("assets/arial.ttf")) fontLoaded = true;
-
-    if (!fontLoaded) {
-        std::cerr << "ERREUR : arial.ttf introuvable ! Verifie le dossier du projet." << std::endl;
+    if (!font.loadFromFile("arial.ttf")) { 
+        font.loadFromFile("C:/Windows/Fonts/arial.ttf");
     }
 
     timerText.setFont(font);
     timerText.setCharacterSize(60); 
     timerText.setFillColor(sf::Color::Blue);
-    timerText.setPosition(windowWidth - 250, 20); 
-    // -----------------------------------------
+    timerText.setPosition(windowWidth - 200, 20); 
 
     while (window.isOpen()) {
         sf::Event event;
@@ -52,13 +50,13 @@ int main() {
 
             if (state == MENU_STATE) {
                 int selection = menu.handleInput(window, event);
-                if (selection == 1) { // Jouer
+                if (selection == 1) { 
                     state = GAMEPLAY_STATE;
                     obstacles.clear();
                     spawnTimer.restart();
                     gameTimer.reset();
                     gameTimer.resume();
-                } else if (selection == 2) {
+                } else if (selection == 2) { 
                     state = ABOUT_STATE;
                 }
             } 
@@ -81,10 +79,32 @@ int main() {
             gameTimer.update();
             timerText.setString(gameTimer.getTimeString());
 
-            // Apparition des obstacles
+            // --- LOGIQUE DE PROGRESSION DES NIVEAUX ---
+            // On récupère le temps écoulé en secondes depuis le début de la partie
+            float secondes = gameTimer.getElapsedTime().asSeconds();
+
+            if (secondes < 15.f) { 
+                // NIVEAU 1 : Vitesse normale
+                background.setNiveau(1);
+                vitesseActuelle = 6.5f;
+            } 
+            else if (secondes < 30.f) { 
+                // NIVEAU 2 : Vitesse augmentée + Nouveau décor
+                background.setNiveau(2);
+                vitesseActuelle = 10.5f;
+            } 
+            else { 
+                // NIVEAU 3 : Vitesse maximale + Décor final
+                background.setNiveau(3);
+                vitesseActuelle = 15.0f;
+            }
+
+            // 1. DESSINER LE BACKGROUND EN PREMIER (fond de l'écran)
+            background.draw(window);
+
+            // 2. GESTION DES OBSTACLES (utilise la vitesse du niveau actuel)
             if (spawnTimer.getElapsedTime().asSeconds() > 1.5f) {
-                // Utilise ton nouveau constructeur (true/false, vitesse)
-                obstacles.push_back(Obstacle(std::rand() % 2 == 0, 6.5f)); 
+                obstacles.push_back(Obstacle(std::rand() % 2 == 0, vitesseActuelle)); 
                 spawnTimer.restart();
             }
 
@@ -95,20 +115,17 @@ int main() {
                 obstacles[i].update();
                 obstacles[i].render(window);
 
-                // Collision
                 if (player.getBounds().intersects(obstacles[i].getBounds())) {
                     state = MENU_STATE; 
                     gameTimer.pause();
                 }
                 
-                // Nettoyage hors écran
                 if (obstacles[i].getBounds().left + obstacles[i].getBounds().width < 0) {
                     obstacles.erase(obstacles.begin() + i);
                     i--; 
                 }
             }
 
-            // Dessin du texte du chrono
             window.draw(timerText);
         }
         window.display();

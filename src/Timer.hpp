@@ -16,6 +16,8 @@ public:
     void pause();
     void resume();
     void reset();
+
+    sf::Time getElapsedTime() const { return elapsedTime; }
     std::string getTimeString() const;
 };
 
