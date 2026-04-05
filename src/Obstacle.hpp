@@ -5,17 +5,19 @@
 
 class Obstacle {
 private:
-    sf::RectangleShape corps; 
+    // "static" signifie que la texture appartient à la CLASSE, pas à l'objet.
+    // Elle reste en mémoire tant que le programme tourne.
+    static sf::Texture textureHaut;
+    static sf::Texture textureBas;
+    static bool texturesChargees;
+
+    sf::Sprite sprite;   
     float vitesse;            
 
 public:
     Obstacle(bool estEnHaut, float v);
-
     void update();
-
-    // Renommé pour correspondre au main.cpp
     void render(sf::RenderWindow& window);
-
     sf::FloatRect getBounds() const;
 };
 
