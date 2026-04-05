@@ -28,17 +28,22 @@ int main() {
     sf::Font font;
     sf::Text timerText;
 
-    // Chargement de la police
-    if (!font.loadFromFile("arial.ttf")) { 
-        // Secours pour Windows si arial.ttf n'est pas dans le dossier projet
-        font.loadFromFile("C:/Windows/Fonts/arial.ttf");
+    
+    // On essaie plusieurs chemins pour trouver la police
+    bool fontLoaded = false;
+    if (font.loadFromFile("arial.ttf")) fontLoaded = true;
+    else if (font.loadFromFile("C:/Windows/Fonts/arial.ttf")) fontLoaded = true;
+    else if (font.loadFromFile("assets/arial.ttf")) fontLoaded = true;
+
+    if (!fontLoaded) {
+        std::cerr << "ERREUR : arial.ttf introuvable ! Verifie le dossier du projet." << std::endl;
     }
 
-    // Configuration de l'affichage du chrono
     timerText.setFont(font);
     timerText.setCharacterSize(60); 
     timerText.setFillColor(sf::Color::Blue);
-    timerText.setPosition(windowWidth - 200, 20); 
+    timerText.setPosition(windowWidth - 250, 20); 
+    // -----------------------------------------
 
     while (window.isOpen()) {
         sf::Event event;
@@ -46,7 +51,6 @@ int main() {
             if (event.type == sf::Event::Closed) window.close();
 
             if (state == MENU_STATE) {
-                // Le menu garde son positionnement et sa logique intacte
                 int selection = menu.handleInput(window, event);
                 if (selection == 1) { // Jouer
                     state = GAMEPLAY_STATE;
@@ -54,7 +58,7 @@ int main() {
                     spawnTimer.restart();
                     gameTimer.reset();
                     gameTimer.resume();
-                } else if (selection == 2) { // À propos
+                } else if (selection == 2) {
                     state = ABOUT_STATE;
                 }
             } 
@@ -77,9 +81,9 @@ int main() {
             gameTimer.update();
             timerText.setString(gameTimer.getTimeString());
 
-            // Gestion de l'apparition des obstacles (avec le nouveau système de textures)
+            // Apparition des obstacles
             if (spawnTimer.getElapsedTime().asSeconds() > 1.5f) {
-                // On passe 'true' ou 'false' au constructeur qui gère ses textures static
+                // Utilise ton nouveau constructeur (true/false, vitesse)
                 obstacles.push_back(Obstacle(std::rand() % 2 == 0, 6.5f)); 
                 spawnTimer.restart();
             }
@@ -89,22 +93,22 @@ int main() {
 
             for (size_t i = 0; i < obstacles.size(); i++) {
                 obstacles[i].update();
-                // Affiche maintenant le sprite au lieu du rectangle
                 obstacles[i].render(window);
 
-                // Collision détectée via sprite.getGlobalBounds() (défini dans obstacle.cpp)
+                // Collision
                 if (player.getBounds().intersects(obstacles[i].getBounds())) {
                     state = MENU_STATE; 
                     gameTimer.pause();
                 }
                 
-                // Nettoyage des obstacles hors écran
+                // Nettoyage hors écran
                 if (obstacles[i].getBounds().left + obstacles[i].getBounds().width < 0) {
                     obstacles.erase(obstacles.begin() + i);
                     i--; 
                 }
             }
 
+            // Dessin du texte du chrono
             window.draw(timerText);
         }
         window.display();
