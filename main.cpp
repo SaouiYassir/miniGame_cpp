@@ -6,7 +6,7 @@
 #include "src/Obstacle.hpp"
 #include "src/Menu.hpp"
 #include "src/Timer.hpp"
-#include "src/Background.hpp" // Ajout de la nouvelle classe
+#include "src/Level.hpp" // Ajout de la nouvelle classe
 
 enum GameState { MENU_STATE, GAMEPLAY_STATE, ABOUT_STATE };
 
@@ -25,8 +25,8 @@ int main() {
     std::vector<Obstacle> obstacles;
     sf::Clock spawnTimer;
 
-    // --- INITIALISATION DU BACKGROUND ET VARIABLES DE NIVEAU ---
-    Background background;
+    // --- INITIALISATION DU level ET VARIABLES DE NIVEAU ---
+    Level level;
     float vitesseActuelle = 6.5f; // Vitesse initiale (Niveau 1)
     // -----------------------------------------------------------
 
@@ -85,22 +85,22 @@ int main() {
 
             if (secondes < 15.f) { 
                 // NIVEAU 1 : Vitesse normale
-                background.setNiveau(1);
+                level.setNiveau(1);
                 vitesseActuelle = 6.5f;
             } 
             else if (secondes < 30.f) { 
                 // NIVEAU 2 : Vitesse augmentée + Nouveau décor
-                background.setNiveau(2);
+                level.setNiveau(2);
                 vitesseActuelle = 10.5f;
             } 
             else { 
                 // NIVEAU 3 : Vitesse maximale + Décor final
-                background.setNiveau(3);
+                level.setNiveau(3);
                 vitesseActuelle = 15.0f;
             }
 
-            // 1. DESSINER LE BACKGROUND EN PREMIER (fond de l'écran)
-            background.draw(window);
+            // 1. DESSINER LE level EN PREMIER (fond de l'écran)
+            level.draw(window);
 
             // 2. GESTION DES OBSTACLES (utilise la vitesse du niveau actuel)
             if (spawnTimer.getElapsedTime().asSeconds() > 1.5f) {

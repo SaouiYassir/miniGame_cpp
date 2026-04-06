@@ -1,12 +1,12 @@
-#include "Background.hpp"
+#include "Level.hpp"
 #include <iostream>
 
-sf::Texture Background::tex1;
-sf::Texture Background::tex2;
-sf::Texture Background::tex3;
-bool Background::charge = false;
+sf::Texture Level::tex1;
+sf::Texture Level::tex2;
+sf::Texture Level::tex3;
+bool Level::charge = false;
 
-Background::Background() {
+Level::Level() {
     if (!charge) {
         if (!tex1.loadFromFile("assets/imgs/bg1.png") ||
             !tex2.loadFromFile("assets/imgs/menuBackground.png") ||
@@ -19,7 +19,7 @@ Background::Background() {
     sprite.setTexture(tex1);
 }
 
-void Background::setNiveau(int niveau) {
+void Level::setNiveau(int niveau) {
     if (niveau == 1) sprite.setTexture(tex1);
     else if (niveau == 2) sprite.setTexture(tex2);
     else if (niveau == 3) sprite.setTexture(tex3);
@@ -30,6 +30,6 @@ void Background::setNiveau(int niveau) {
     // sprite.setScale(scaleX, scaleY);
 }
 
-void Background::draw(sf::RenderWindow& window) {
+void Level::draw(sf::RenderWindow& window) {
     window.draw(sprite);
 }
