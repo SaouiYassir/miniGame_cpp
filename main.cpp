@@ -12,8 +12,8 @@
 enum GameState { MENU_STATE, GAMEPLAY_STATE, ABOUT_STATE };
 
 int main() {
-    int windowWidth = 1300;
-    int windowHeight = 1000;
+    int windowWidth = 1080;
+    int windowHeight = 720;
 
     std::srand(static_cast<unsigned>(std::time(nullptr)));
     sf::RenderWindow window(sf::VideoMode(windowWidth, windowHeight), "SFML Game");
@@ -42,8 +42,8 @@ int main() {
     }
 
     timerText.setFont(font);
-    timerText.setCharacterSize(60); 
-    timerText.setFillColor(sf::Color::Blue);
+    timerText.setCharacterSize(30); 
+    timerText.setFillColor(sf::Color::White);
     timerText.setPosition(windowWidth - 200, 20); 
 
     while (window.isOpen()) {

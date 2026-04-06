@@ -5,10 +5,10 @@ using namespace sf;
 
 Menu::Menu(float width, float height) {
 
-    float screenWidth = 1300;
-    float screenHeight = 1000;
-    float buttonWidth = 300;
-    float buttonHeight = 120;
+    float screenWidth = 1080;
+    float screenHeight = 720;
+    float buttonWidth = 250;
+    float buttonHeight = 80;
     float spacing = 20;
 
     float xPos = (screenWidth - buttonWidth) / 2;
@@ -65,9 +65,11 @@ Menu::Menu(float width, float height) {
 
     menuSprite.setTexture(menuTexture);
     menuSprite.setPosition(0, 0);
+    menuSprite.setScale(0.8f, 0.8f);
 
     aboutSprite.setTexture(aboutTexture);
     aboutSprite.setPosition(0, 0);
+    aboutSprite.setScale(0.7f, 0.7f);
 }
 
 void Menu::update(RenderWindow& window) {
