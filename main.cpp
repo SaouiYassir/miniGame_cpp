@@ -6,12 +6,12 @@
 #include "src/Obstacle.hpp"
 #include "src/Menu.hpp"
 #include "src/Timer.hpp"
-#include "src/Level.hpp" // Ajout de la nouvelle classe
+#include "src/Level.hpp"
+#include "src/Heart.hpp" // --- AJOUT : Inclusion de la classe Heart ---
 
 enum GameState { MENU_STATE, GAMEPLAY_STATE, ABOUT_STATE };
 
 int main() {
-    // Dimensions de la fenêtre (inchangées)
     int windowWidth = 1300;
     int windowHeight = 1000;
 
@@ -25,10 +25,13 @@ int main() {
     std::vector<Obstacle> obstacles;
     sf::Clock spawnTimer;
 
-    // --- INITIALISATION DU level ET VARIABLES DE NIVEAU ---
+    // --- AJOUT : Système de vie et timer d'invulnérabilité ---
+    Heart hp; 
+    sf::Clock damageTimer; // Pour éviter de perdre toutes les vies d'un coup
+    // ---------------------------------------------------------
+
     Level level;
-    float vitesseActuelle = 6.5f; // Vitesse initiale (Niveau 1)
-    // -----------------------------------------------------------
+    float vitesseActuelle = 6.5f; 
 
     Timer gameTimer;
     sf::Font font;
@@ -56,6 +59,7 @@ int main() {
                     spawnTimer.restart();
                     gameTimer.reset();
                     gameTimer.resume();
+                    hp.reset(); // --- AJOUT : Réinitialise les coeurs au début d'une partie ---
                 } else if (selection == 2) { 
                     state = ABOUT_STATE;
                 }
@@ -79,30 +83,23 @@ int main() {
             gameTimer.update();
             timerText.setString(gameTimer.getTimeString());
 
-            // --- LOGIQUE DE PROGRESSION DES NIVEAUX ---
-            // On récupère le temps écoulé en secondes depuis le début de la partie
             float secondes = gameTimer.getElapsedTime().asSeconds();
 
             if (secondes < 15.f) { 
-                // NIVEAU 1 : Vitesse normale
                 level.setNiveau(1);
                 vitesseActuelle = 6.5f;
             } 
             else if (secondes < 30.f) { 
-                // NIVEAU 2 : Vitesse augmentée + Nouveau décor
                 level.setNiveau(2);
                 vitesseActuelle = 10.5f;
             } 
             else { 
-                // NIVEAU 3 : Vitesse maximale + Décor final
                 level.setNiveau(3);
                 vitesseActuelle = 15.0f;
             }
 
-            // 1. DESSINER LE level EN PREMIER (fond de l'écran)
             level.draw(window);
 
-            // 2. GESTION DES OBSTACLES (utilise la vitesse du niveau actuel)
             if (spawnTimer.getElapsedTime().asSeconds() > 1.5f) {
                 obstacles.push_back(Obstacle(std::rand() % 2 == 0, vitesseActuelle)); 
                 spawnTimer.restart();
@@ -115,9 +112,18 @@ int main() {
                 obstacles[i].update();
                 obstacles[i].render(window);
 
+                // --- MODIFICATION DE LA LOGIQUE DE COLLISION ---
                 if (player.getBounds().intersects(obstacles[i].getBounds())) {
-                    state = MENU_STATE; 
-                    gameTimer.pause();
+                    // On vérifie si 1 seconde s'est écoulée depuis le dernier dégât (invulnérabilité)
+                    if (damageTimer.getElapsedTime().asSeconds() > 1.0f) {
+                        hp.hit(); // Réduit la vie
+                        damageTimer.restart(); // Relance le timer d'invulnérabilité
+                        
+                        // Si plus de vie, Game Over
+                        if (hp.getHealth() <= 0) {
+                            window.close(); // Ferme la fenêtre comme demandé
+                        }
+                    }
                 }
                 
                 if (obstacles[i].getBounds().left + obstacles[i].getBounds().width < 0) {
@@ -126,6 +132,8 @@ int main() {
                 }
             }
 
+            // --- AJOUT : Dessiner la barre de vie et le timer ---
+            hp.draw(window); 
             window.draw(timerText);
         }
         window.display();
