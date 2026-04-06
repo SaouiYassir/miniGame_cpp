@@ -38,12 +38,14 @@ int main() {
     sf::Text timerText;
 
     if (!font.loadFromFile("arial.ttf")) { 
-        font.loadFromFile("C:/Windows/Fonts/arial.ttf");
+        font.loadFromFile("assets/fonts/font1.ttf");
     }
 
     timerText.setFont(font);
-    timerText.setCharacterSize(30); 
+    timerText.setCharacterSize(30);
     timerText.setFillColor(sf::Color::White);
+    timerText.setOutlineThickness(2);
+    timerText.setOutlineColor(sf::Color::Black);  
     timerText.setPosition(windowWidth - 200, 20); 
 
     while (window.isOpen()) {

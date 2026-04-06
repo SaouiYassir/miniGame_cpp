@@ -31,7 +31,7 @@ void Player::handleInput() {
     bool cPressed = Keyboard::isKeyPressed(Keyboard::C);
     if (cPressed && !isCrouching) {
         sprite.setTexture(texture2);
-        sprite.setScale(0.8f, 0.8f);
+        sprite.setScale(0.25f, 0.25f);
         sprite.move(0.f, 25.f); // Ajusté selon le scale pour rester au sol
         isCrouching = true;
     } 
