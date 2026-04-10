@@ -21,7 +21,7 @@ Obstacle::Obstacle(bool flying, float speed)
         sprite.setTexture(flyingTexture);
 
         // Flying enemy = head level
-        sprite.setPosition(1080.f, 180.f);
+        sprite.setPosition(1080.f, 220.f);
         sprite.setScale(1.f, 1.f);
     }
     else {

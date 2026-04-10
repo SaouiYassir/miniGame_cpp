@@ -41,6 +41,7 @@ Player::Player() {
 void Player::handleInput() {
     isMoving = false; // Assume not moving unless a key is pressed
     isCrouching = false;
+    float direction = (sprite.getScale().x > 0) ? 1.f : -1.f;
 
     if (Keyboard::isKeyPressed(Keyboard::D)) {
         sprite.move(moveSpeed, 0.f);
@@ -60,7 +61,7 @@ void Player::handleInput() {
 
     if (Keyboard::isKeyPressed(Keyboard::C) && !isJumping) {
         isCrouching = true;
-        sprite.move(moveSpeed * 1.5f, 0.f);
+        sprite.move(moveSpeed * 1.5f * direction, 0.f);
     }
     else {
         float scaleX = sprite.getScale().x > 0 ? 0.25f : -0.25f;
