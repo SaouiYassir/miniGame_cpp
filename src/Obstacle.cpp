@@ -1,31 +1,35 @@
 #include "Obstacle.hpp"
 #include <iostream>
 
-// --- INITIALISATION DES STATICS ---
-sf::Texture Obstacle::textureHaut;
-sf::Texture Obstacle::textureBas;
+// Static textures
+Texture Obstacle::flyingTexture;
+Texture Obstacle::groundTexture;
 bool Obstacle::texturesChargees = false;
 
-Obstacle::Obstacle(bool estEnHaut, float v) {
-    vitesse = v;
-
-    // On ne charge les images qu'UNE SEULE FOIS pour tout le jeu
+Obstacle::Obstacle(bool flying, float speed)
+    : isFlying(flying), vitesse(speed)
+{
     if (!texturesChargees) {
-        if (!textureHaut.loadFromFile("assets/imgs/centipede_light_shadow2.png") ||
-            !textureBas.loadFromFile("assets/imgs/white_crystal_light_shadow1.png")) {
+        if (!flyingTexture.loadFromFile("assets/imgs/centipede_light_shadow2.png") ||
+            !groundTexture.loadFromFile("assets/imgs/white_crystal_light_shadow1.png")) {
             std::cerr << "Erreur : Impossible de charger les textures !" << std::endl;
         }
         texturesChargees = true;
     }
 
-    // Attribution de la texture au sprite
-    if (estEnHaut) {
-        sprite.setTexture(textureHaut);
-        sprite.setPosition(1080.f, 250.f);
-    } 
+    if (isFlying) {
+        sprite.setTexture(flyingTexture);
+
+        // Flying enemy = head level
+        sprite.setPosition(1080.f, 180.f);
+        sprite.setScale(1.f, 1.f);
+    }
     else {
-        sprite.setTexture(textureBas);
-        sprite.setPosition(1080.f, 360.f);       
+        sprite.setTexture(groundTexture);
+
+        // Ground enemy = near floor
+        sprite.setPosition(1080.f, 330.f);
+        sprite.setScale(1.f, 1.f);
     }
 }
 
@@ -33,10 +37,14 @@ void Obstacle::update() {
     sprite.move(-vitesse, 0.f);
 }
 
-void Obstacle::render(sf::RenderWindow& window) {
+void Obstacle::render(RenderWindow& window) {
     window.draw(sprite);
 }
 
-sf::FloatRect Obstacle::getBounds() const {
+FloatRect Obstacle::getBounds() const {
     return sprite.getGlobalBounds();
+}
+
+bool Obstacle::getIsFlying() const {
+    return isFlying;
 }

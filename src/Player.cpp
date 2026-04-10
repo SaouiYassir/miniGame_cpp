@@ -17,6 +17,14 @@ Player::Player() {
         }
     }
 
+    // 3/ Load Sliding Frames
+    for (int i=0; i<6; i++) {
+        Texture t;
+        if (t.loadFromFile("assets/imgs/Sliding/0_Bloody_Alchemist_Sliding_" + to_string(i) + ".png")) {
+            slidingFrames.push_back(t);
+        }
+    }
+
     // Initialize Sprite with the first idle frame
     if (!idleFrames.empty()) {
         sprite.setTexture(idleFrames[0]);
@@ -32,6 +40,7 @@ Player::Player() {
 
 void Player::handleInput() {
     isMoving = false; // Assume not moving unless a key is pressed
+    isCrouching = false;
 
     if (Keyboard::isKeyPressed(Keyboard::D)) {
         sprite.move(moveSpeed, 0.f);
@@ -47,6 +56,15 @@ void Player::handleInput() {
     if (Keyboard::isKeyPressed(Keyboard::Space) && !isJumping) {
         isJumping = true;
         velocityY = jumpForce;
+    }
+
+    if (Keyboard::isKeyPressed(Keyboard::C) && !isJumping) {
+        isCrouching = true;
+        sprite.move(moveSpeed * 1.5f, 0.f);
+    }
+    else {
+        float scaleX = sprite.getScale().x > 0 ? 0.25f : -0.25f;
+        sprite.setScale(scaleX, 0.25f);
     }
 }
 
@@ -65,12 +83,13 @@ void Player::applyPhysics() {
 }
 
 void Player::updateAnimation() {
-    // Determine which set of textures to cycle through
-    vector<Texture>& currentSet = isMoving ? runFrames : idleFrames;
+    vector<Texture>& currentSet =
+        isCrouching ? slidingFrames :
+        isMoving ? runFrames :
+        idleFrames;
 
     if (currentSet.empty()) return;
 
-    // Timer logic: Change frame only if enough time has passed
     if (animationClock.getElapsedTime().asSeconds() >= frameDuration) {
         currentFrame = (currentFrame + 1) % currentSet.size();
         sprite.setTexture(currentSet[currentFrame]);
@@ -89,5 +108,25 @@ void Player::render(RenderWindow& window) {
 }
 
 FloatRect Player::getBounds() const { 
-    return sprite.getGlobalBounds(); 
+    FloatRect bounds = sprite.getGlobalBounds();
+
+    // 1. RÉDUCTION DE LA LARGEUR (Padding horizontal)
+    // On réduit la largeur et on décale la gauche pour centrer la hitbox sur le corps
+    float widthReduction = bounds.width * 0.4f; // On enlève 40% de la largeur totale
+    bounds.width -= widthReduction;
+    bounds.left += widthReduction / 2.0f;
+
+    // 2. LOGIQUE D'ACCROUPISSEMENT ET HAUTEUR
+    if (isCrouching) {
+        // Hitbox courte quand il est accroupi
+        bounds.height *= 0.5f;
+        bounds.top += bounds.height; // On descend le haut de la box vers le sol
+    } else {
+        // Optionnel : Réduire un peu la hauteur même debout pour éviter de 
+        // se prendre un obstacle à cause d'un chapeau ou d'une mèche de cheveux
+        bounds.height *= 0.9f;
+        bounds.top += sprite.getGlobalBounds().height * 0.1f;
+    }
+
+    return bounds;
 }

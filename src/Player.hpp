@@ -12,6 +12,7 @@ private:
 
     vector<Texture> idleFrames;
     vector<Texture> runFrames;
+    vector<Texture> slidingFrames;
     
     int currentFrame = 0;
     Clock animationClock;  // Tracks time passed
@@ -22,7 +23,7 @@ private:
     const float moveSpeed = 5.0f;
     const float gravity = 0.8f;
     const float jumpForce = -20.0f;
-    const float groundY = 350.0f;
+    const float groundY = 380.0f;
     
     // États
     float velocityY = 0.0f;

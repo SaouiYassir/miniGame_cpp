@@ -3,22 +3,26 @@
 
 #include <SFML/Graphics.hpp>
 
+using namespace sf;
+
 class Obstacle {
 private:
     // "static" signifie que la texture appartient à la CLASSE, pas à l'objet.
     // Elle reste en mémoire tant que le programme tourne.
-    static sf::Texture textureHaut;
-    static sf::Texture textureBas;
+    static Texture flyingTexture;
+    static Texture groundTexture;
     static bool texturesChargees;
+    bool isFlying;
 
-    sf::Sprite sprite;   
+    Sprite sprite;   
     float vitesse;            
 
 public:
-    Obstacle(bool estEnHaut, float v);
+    Obstacle(bool, float);
     void update();
-    void render(sf::RenderWindow& window);
-    sf::FloatRect getBounds() const;
+    void render(RenderWindow& window);
+    FloatRect getBounds() const;
+    bool getIsFlying() const;
 };
 
 #endif
