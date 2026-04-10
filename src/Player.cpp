@@ -1,44 +1,52 @@
 #include "Player.hpp"
 
 Player::Player() {
-    if (!texture1.loadFromFile("assets/imgs/player.png")) {
-        // En C++, on préfère souvent une exception ou un log plus sérieux
-        cout << "Error loading player image" << endl;
+    // 1. Load Idle Frames (Assuming 18 frames based on your previous code)
+    for (int i = 0; i < 18; i++) {
+        Texture t;
+        if (t.loadFromFile("assets/imgs/Idle/0_Bloody_Alchemist_Idle_" + to_string(i) + ".png")) {
+            idleFrames.push_back(t);
+        }
     }
-    if (!texture2.loadFromFile("assets/imgs/player2.png")) {
-        // En C++, on préfère souvent une exception ou un log plus sérieux
-        cout << "Error loading player image" << endl;
+
+    // 2. Load Run Frames (Adjust the loop limit to your actual number of run files)
+    for (int i = 0; i < 12; i++) {
+        Texture t;
+        if (t.loadFromFile("assets/imgs/Running/0_Bloody_Alchemist_Running_" + to_string(i) + ".png")) {
+            runFrames.push_back(t);
+        }
     }
-    sprite.setTexture(texture1);
+
+    // Initialize Sprite with the first idle frame
+    if (!idleFrames.empty()) {
+        sprite.setTexture(idleFrames[0]);
+    }
+    
+    // Set origin to center so flipping (A/D) doesn't cause "teleporting"
+    FloatRect bounds = sprite.getLocalBounds();
+    sprite.setOrigin(bounds.width / 2.f, bounds.height / 2.f);
+    
     sprite.setScale(0.25f, 0.25f);
-    sprite.setPosition(10.f, groundY);
+    sprite.setPosition(100.f, groundY);
 }
 
 void Player::handleInput() {
-    // Mouvements horizontaux
-    if (Keyboard::isKeyPressed(Keyboard::D)) 
-        sprite.move(moveSpeed, 0.f);
-    if (Keyboard::isKeyPressed(Keyboard::A)) 
-        sprite.move(-moveSpeed, 0.f);
+    isMoving = false; // Assume not moving unless a key is pressed
 
-    // Saut
+    if (Keyboard::isKeyPressed(Keyboard::D)) {
+        sprite.move(moveSpeed, 0.f);
+        sprite.setScale(0.25f, 0.25f); // Face Right
+        isMoving = true;
+    } 
+    else if (Keyboard::isKeyPressed(Keyboard::A)) {
+        sprite.move(-moveSpeed, 0.f);
+        sprite.setScale(-0.25f, 0.25f); // Face Left
+        isMoving = true;
+    }
+
     if (Keyboard::isKeyPressed(Keyboard::Space) && !isJumping) {
         isJumping = true;
         velocityY = jumpForce;
-    }
-
-    // Accroupissement (Optimisé : On ne change le scale que si nécessaire)
-    bool cPressed = Keyboard::isKeyPressed(Keyboard::C);
-    if (cPressed && !isCrouching) {
-        sprite.setTexture(texture2);
-        sprite.setScale(0.25f, 0.25f);
-        sprite.move(0.f, 25.f); // Ajusté selon le scale pour rester au sol
-        isCrouching = true;
-    } 
-    else if (!cPressed && isCrouching) {
-        sprite.setTexture(texture1);
-        sprite.move(0.f, -25.f);
-        isCrouching = false;
     }
 }
 
@@ -47,7 +55,7 @@ void Player::applyPhysics() {
         velocityY += gravity;
         sprite.move(0.f, velocityY);
 
-        // Atterrissage
+        // Ground collision check
         if (sprite.getPosition().y >= groundY) {
             sprite.setPosition(sprite.getPosition().x, groundY);
             isJumping = false;
@@ -56,9 +64,24 @@ void Player::applyPhysics() {
     }
 }
 
+void Player::updateAnimation() {
+    // Determine which set of textures to cycle through
+    vector<Texture>& currentSet = isMoving ? runFrames : idleFrames;
+
+    if (currentSet.empty()) return;
+
+    // Timer logic: Change frame only if enough time has passed
+    if (animationClock.getElapsedTime().asSeconds() >= frameDuration) {
+        currentFrame = (currentFrame + 1) % currentSet.size();
+        sprite.setTexture(currentSet[currentFrame]);
+        animationClock.restart();
+    }
+}
+
 void Player::update() {
     handleInput();
     applyPhysics();
+    updateAnimation();
 }
 
 void Player::render(RenderWindow& window) {

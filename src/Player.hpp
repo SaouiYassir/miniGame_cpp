@@ -8,8 +8,15 @@ using namespace sf;
 
 class Player {
 private:
-    sf::Sprite sprite;
-    sf::Texture texture1, texture2;
+    Sprite sprite;
+
+    vector<Texture> idleFrames;
+    vector<Texture> runFrames;
+    
+    int currentFrame = 0;
+    Clock animationClock;  // Tracks time passed
+    float frameDuration = 0.05f; // Speed of animation (0.1 seconds per frame)
+    bool isMoving = false;
 
     // Constantes de mouvement (plus facile à régler ici)
     const float moveSpeed = 5.0f;
@@ -29,10 +36,12 @@ private:
 public:
     Player();
     
+    void animate();
     void update();
-    void render(sf::RenderWindow& window);
+    void updateAnimation();
+    void render(RenderWindow& window);
     
-    sf::FloatRect getBounds() const; // Ajout de 'const' car ne modifie pas l'objet
+    FloatRect getBounds() const; // Ajout de 'const' car ne modifie pas l'objet
 };
 
 #endif
