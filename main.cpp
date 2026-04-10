@@ -192,7 +192,7 @@ int main() {
             window.draw(centerText);
             
             // Petit texte informatif
-            sf::Text retryText("Appuyez sur une touche pour avoir le Menu ", font, 30);
+            sf::Text retryText(" Press a key to have the Menu ", font, 30);
             retryText.setPosition(windowWidth / 2.0f - 150, windowHeight / 2.0f + 60);
             window.draw(retryText);
         }
