@@ -1,12 +1,7 @@
 #include "Game.hpp"
 #include <ctime>
 
-Game::Game()
-    : windowWidth(1080),
-      windowHeight(720),
-      window(VideoMode(1080, 720), "SFML Game"),
-      menu(windowWidth, windowHeight)
-{
+Game::Game() : windowWidth(1080), windowHeight(720), window(VideoMode(1080, 720), "SFML Game"), menu(windowWidth, windowHeight) {
     window.setFramerateLimit(60);
     state = MENU_STATE;
 
@@ -26,6 +21,13 @@ Game::Game()
     centerText.setFont(font);
     centerText.setCharacterSize(120);
     centerText.setStyle(Text::Bold);
+
+    if (!backgroundMusic.openFromFile("assets/music/Bonkers-for-Arcades.ogg")) {
+        std::cout << "Error loading about backgroung music" << std::endl;
+    }
+
+    backgroundMusic.setLoop(true);
+    backgroundMusic.setVolume(40.f);
 }
 
 void Game::run() {
@@ -66,6 +68,7 @@ void Game::processEvents() {
         else if (event.type == Event::KeyPressed && event.key.code == Keyboard::Escape) {
             state = MENU_STATE;
             gameTimer.pause();
+            backgroundMusic.stop();
         }
     }
 }
@@ -141,7 +144,10 @@ void Game::updateGameplay() {
             if (damageTimer.getElapsedTime().asSeconds() > 1.0f) {
                 hp.hit();
                 damageTimer.restart();
-                if (hp.getHealth() <= 0) state = GAME_OVER_STATE;
+                if (hp.getHealth() <= 0) {
+                    state = GAME_OVER_STATE;
+                    backgroundMusic.stop();
+                }
             }
         }
 
@@ -241,4 +247,5 @@ void Game::resetGame() {
     level.setNiveau(1);
     lastLevel = 1;
     showLevelMessage = false;
+    backgroundMusic.play();
 }

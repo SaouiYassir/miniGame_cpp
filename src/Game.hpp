@@ -43,11 +43,12 @@ private:
     Text timerText;
     Text centerText;
 
+    Music backgroundMusic;
+
     float vitesseActuelle;
     int lastLevel;
     bool showLevelMessage;
 
-private:
     void processEvents();
     void update();
     void render();

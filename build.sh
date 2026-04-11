@@ -1,1 +1,1 @@
-g++ main.cpp src/*.cpp -I./src -o game -lsfml-graphics -lsfml-window -lsfml-system
+g++ main.cpp src/*.cpp -I./src -o game -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio
