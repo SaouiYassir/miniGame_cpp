@@ -26,6 +26,14 @@ Game::Game() : windowWidth(1080), windowHeight(720), window(VideoMode(1080, 720)
         std::cout << "Error loading about backgroung music" << std::endl;
     }
 
+    if (!gameOverEffect.openFromFile("assets/music/game-over.ogg")) {
+        std::cout << "Error loading about game over effect" << std::endl;
+    }
+
+    if (!damageEffect.openFromFile("assets/music/damage.ogg")) {
+        std::cout << "Error loading about damage effect" << std::endl;
+    }
+
     backgroundMusic.setLoop(true);
     backgroundMusic.setVolume(40.f);
 }
@@ -143,10 +151,12 @@ void Game::updateGameplay() {
         if (playerHitbox.intersects(obstacleHitbox)) {
             if (damageTimer.getElapsedTime().asSeconds() > 1.0f) {
                 hp.hit();
+                damageEffect.play();
                 damageTimer.restart();
                 if (hp.getHealth() <= 0) {
                     state = GAME_OVER_STATE;
                     backgroundMusic.stop();
+                    gameOverEffect.play();
                 }
             }
         }

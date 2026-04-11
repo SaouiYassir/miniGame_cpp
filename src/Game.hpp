@@ -44,6 +44,8 @@ private:
     Text centerText;
 
     Music backgroundMusic;
+    Music gameOverEffect;
+    Music damageEffect;
 
     float vitesseActuelle;
     int lastLevel;
