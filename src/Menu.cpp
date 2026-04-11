@@ -18,11 +18,11 @@ Menu::Menu(float width, float height) {
         std::cout << "Error loading font" << std::endl;
     }
 
-    if (!menuTexture.loadFromFile("assets/imgs/menuBackground.png")) {
+    if (!menuTexture.loadFromFile("assets/imgs/backgrounds/menuBackground.png")) {
         std::cout << "Error loading menu image" << std::endl;
     }
 
-    if (!aboutTexture.loadFromFile("assets/imgs/aboutBackground.png")) {
+    if (!aboutTexture.loadFromFile("assets/imgs/backgrounds/aboutBackground.png")) {
         std::cout << "Error loading about image" << std::endl;
     }
 

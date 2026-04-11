@@ -10,8 +10,8 @@ Obstacle::Obstacle(bool flying, float speed)
     : isFlying(flying), vitesse(speed)
 {
     if (!texturesChargees) {
-        if (!flyingTexture.loadFromFile("assets/imgs/centipede_light_shadow2.png") ||
-            !groundTexture.loadFromFile("assets/imgs/white_crystal_light_shadow1.png")) {
+        if (!flyingTexture.loadFromFile("assets/imgs/obstacles/centipede_light_shadow2.png") ||
+            !groundTexture.loadFromFile("assets/imgs/obstacles/white_crystal_light_shadow1.png")) {
             std::cerr << "Erreur : Impossible de charger les textures !" << std::endl;
         }
         texturesChargees = true;

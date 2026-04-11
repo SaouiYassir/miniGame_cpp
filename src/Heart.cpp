@@ -4,11 +4,11 @@
 Heart::Heart() {
     health = maxHealth;
 
-    if (!redTexture.loadFromFile("assets/imgs/heart.png")) {
+    if (!redTexture.loadFromFile("assets/imgs/hearts/red_heart.png")) {
         cout << "Error loading red heart\n";
     }
 
-    if (!grayTexture.loadFromFile("assets/imgs/gray_heart.png")) {
+    if (!grayTexture.loadFromFile("assets/imgs/hearts/gray_heart.png")) {
         cout << "Error loading gray heart\n";
     }
 

@@ -8,9 +8,9 @@ bool Level::charge = false;
 
 Level::Level() {
     if (!charge) {
-        if (!tex1.loadFromFile("assets/imgs/bamboo bridge.png") ||
-            !tex2.loadFromFile("assets/imgs/forest bridge.png") ||
-            !tex3.loadFromFile("assets/imgs/sky bridge.png")) {
+        if (!tex1.loadFromFile("assets/imgs/backgrounds/bamboo bridge.png") ||
+            !tex2.loadFromFile("assets/imgs/backgrounds/forest bridge.png") ||
+            !tex3.loadFromFile("assets/imgs/backgrounds/sky bridge.png")) {
             std::cerr << "Erreur de chargement des fonds !" << std::endl;
         }
         charge = true;
