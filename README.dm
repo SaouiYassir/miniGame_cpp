@@ -1,4 +1,4 @@
-# 🎮 Mini Game C++  
+## 🎮 Mini Game C++  
 
 A small 2D mini game built in **C++** using **SFML 2**, focused on smooth gameplay, animations, collisions, UI elements, and game states.
 
