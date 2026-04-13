@@ -133,16 +133,16 @@ This project helped improve my understanding of:
 **Yassir Saoui (Author)**  
 C++ / Game Development / SFML  
 
-GitHub: https://github.com/SaouiYassir
-LinkedIn : https://www.linkedin.com/in/yassir-saoui/
+- GitHub: https://github.com/SaouiYassir
+- LinkedIn : https://www.linkedin.com/in/yassir-saoui/
 
 ---
 
 **Aymane Hamouch**  
 C++ / Game Development / SFML  
 
-GitHub: https://github.com/aymanehamouch05
-LinkedIn : https://www.linkedin.com/in/aymane-hamouch-2335bb3b4/
+- GitHub: https://github.com/aymanehamouch05
+- LinkedIn : https://www.linkedin.com/in/hamouchaymane/
 
 ---
 
