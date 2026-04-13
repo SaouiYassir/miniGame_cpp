@@ -1,6 +1,4 @@
 #include "Timer.hpp"
-#include <sstream>
-#include <iomanip>
 
 Timer::Timer() : isRunning(false), elapsedTime(Time::Zero) {}
 
