@@ -16,12 +16,12 @@ private:
     Texture grayTexture;
     vector<Sprite> hearts;
     
-    void updateVisuals(); // Met à jour l'affichage selon les PV restants
+    void updateVisuals(); 
 
 public:
     Heart();
-    void hit();               // Appelée quand le joueur touche un obstacle
-    int getHealth() const;    // Pour savoir si on est à 0 (Game Over)
+    void hit();           
+    int getHealth() const;
     void draw(RenderWindow& window);
     void reset();
 };

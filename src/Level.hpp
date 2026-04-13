@@ -13,7 +13,7 @@ private:
 
 public:
     Level();
-    void setNiveau(int niveau); // Change la texture selon le niveau (1, 2 ou 3)
+    void setNiveau(int niveau);
     void draw(sf::RenderWindow& window);
 };
 

@@ -15,7 +15,6 @@ Level::Level() {
         }
         charge = true;
     }
-    // Par défaut, on commence au niveau 1
     sprite.setTexture(tex1);
 }
 

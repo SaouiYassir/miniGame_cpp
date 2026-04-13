@@ -33,7 +33,7 @@ public:
     void draw(RenderWindow& window);
     void drawAbout(RenderWindow& window);
     void update(RenderWindow& window);
-    int handleInput(RenderWindow& window, Event& event); // Must be int
+    int handleInput(RenderWindow& window, Event& event); 
 };
 
 #endif

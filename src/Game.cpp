@@ -22,7 +22,7 @@ Game::Game() : windowWidth(1080), windowHeight(720), window(VideoMode(1080, 720)
     centerText.setCharacterSize(100);
     centerText.setStyle(Text::Bold);
 
-    // Audio Loading
+    
     if (!backgroundMusic.openFromFile("assets/music/Bonkers-for-Arcades.ogg")) 
         cout << "Error loading background music" << endl;
     if (!gameOverEffect.openFromFile("assets/music/game-over.ogg")) 
@@ -49,7 +49,7 @@ void Game::processEvents() {
             window.close();
 
         if (event.type == Event::KeyPressed) {
-            // Handle Pause Toggle
+            
             if (event.key.code == Keyboard::Escape || event.key.code == Keyboard::P) {
                 if (state == GAMEPLAY_STATE || state == PAUSED_STATE) {
                     togglePause();
@@ -75,17 +75,16 @@ void Game::togglePause() {
     if (state == GAMEPLAY_STATE) {
         state = PAUSED_STATE;
         backgroundMusic.pause();
-        gameTimer.pause();   // Crucial: stops your Timer class
+        gameTimer.pause();   
     } else if (state == PAUSED_STATE) {
         state = GAMEPLAY_STATE;
         backgroundMusic.play();
-        gameTimer.resume();  // Crucial: restarts your Timer class
-        spawnTimer.restart(); // Prevents instant obstacle spawn
+        gameTimer.resume();  
+        spawnTimer.restart();
     }
 }
 
 void Game::update() {
-    // We ONLY update logic if the game is in active gameplay
     if (state == GAMEPLAY_STATE) {
         updateGameplay();
     }
@@ -98,7 +97,6 @@ void Game::updateGameplay() {
     float secondes = gameTimer.getElapsedTime().asSeconds();
     int currentLevel = 1;
 
-    // Level progression
     if (secondes < 15.f) { currentLevel = 1; vitesseActuelle = 6.5f; }
     else if (secondes < 30.f) { currentLevel = 2; vitesseActuelle = 10.5f; }
     else { currentLevel = 3; vitesseActuelle = 15.0f; }
@@ -111,7 +109,6 @@ void Game::updateGameplay() {
 
     level.setNiveau(currentLevel);
 
-    // Spawning logic
     if (!showLevelMessage) {
         if (spawnTimer.getElapsedTime().asSeconds() > 1.5f) {
             obstacles.push_back(Obstacle(rand() % 2 == 0, vitesseActuelle));
@@ -123,7 +120,6 @@ void Game::updateGameplay() {
 
     player.update();
 
-    // Obstacle and Collision logic
     for (size_t i = 0; i < obstacles.size(); i++) {
         obstacles[i].update();
 
@@ -168,12 +164,12 @@ void Game::render() {
         renderGameplay();
 
         if (state == PAUSED_STATE) {
-            // Draw Dimmer Overlay
+        
             RectangleShape dimmer(Vector2f(windowWidth, windowHeight));
             dimmer.setFillColor(Color(0, 0, 0, 150));
             window.draw(dimmer);
 
-            // Draw "PAUSED"
+        
             centerText.setString("PAUSED");
             centerText.setFillColor(Color::Yellow);
             FloatRect bounds = centerText.getLocalBounds();

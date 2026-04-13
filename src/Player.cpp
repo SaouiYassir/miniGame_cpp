@@ -1,7 +1,6 @@
 #include "Player.hpp"
 
 Player::Player() {
-    // 1. Load Idle Frames (Assuming 18 frames based on your previous code)
     for (int i = 0; i < 18; i++) {
         Texture t;
         if (t.loadFromFile("assets/imgs/Idle/0_Bloody_Alchemist_Idle_" + to_string(i) + ".png")) {
@@ -9,7 +8,6 @@ Player::Player() {
         }
     }
 
-    // 2. Load Run Frames (Adjust the loop limit to your actual number of run files)
     for (int i = 0; i < 12; i++) {
         Texture t;
         if (t.loadFromFile("assets/imgs/Running/0_Bloody_Alchemist_Running_" + to_string(i) + ".png")) {
@@ -17,7 +15,6 @@ Player::Player() {
         }
     }
 
-    // 3/ Load Sliding Frames
     for (int i=0; i<6; i++) {
         Texture t;
         if (t.loadFromFile("assets/imgs/Sliding/0_Bloody_Alchemist_Sliding_" + to_string(i) + ".png")) {
@@ -25,12 +22,10 @@ Player::Player() {
         }
     }
 
-    // Initialize Sprite with the first idle frame
     if (!idleFrames.empty()) {
         sprite.setTexture(idleFrames[0]);
     }
     
-    // Set origin to center so flipping (A/D) doesn't cause "teleporting"
     FloatRect bounds = sprite.getLocalBounds();
     sprite.setOrigin(bounds.width / 2.f, bounds.height / 2.f);
     
@@ -39,7 +34,7 @@ Player::Player() {
 }
 
 void Player::handleInput() {
-    isMoving = false; // Assume not moving unless a key is pressed
+    isMoving = false; 
     isCrouching = false;
     float direction = (sprite.getScale().x > 0) ? 1.f : -1.f;
 
@@ -74,7 +69,6 @@ void Player::applyPhysics() {
         velocityY += gravity;
         sprite.move(0.f, velocityY);
 
-        // Ground collision check
         if (sprite.getPosition().y >= groundY) {
             sprite.setPosition(sprite.getPosition().x, groundY);
             isJumping = false;
@@ -112,19 +106,15 @@ FloatRect Player::getBounds() const {
     FloatRect bounds = sprite.getGlobalBounds();
 
     // 1. RÉDUCTION DE LA LARGEUR (Padding horizontal)
-    // On réduit la largeur et on décale la gauche pour centrer la hitbox sur le corps
-    float widthReduction = bounds.width * 0.4f; // On enlève 40% de la largeur totale
+    float widthReduction = bounds.width * 0.4f; 
     bounds.width -= widthReduction;
     bounds.left += widthReduction / 2.0f;
 
     // 2. LOGIQUE D'ACCROUPISSEMENT ET HAUTEUR
     if (isCrouching) {
-        // Hitbox courte quand il est accroupi
         bounds.height *= 0.5f;
-        bounds.top += bounds.height; // On descend le haut de la box vers le sol
+        bounds.top += bounds.height; 
     } else {
-        // Optionnel : Réduire un peu la hauteur même debout pour éviter de 
-        // se prendre un obstacle à cause d'un chapeau ou d'une mèche de cheveux
         bounds.height *= 0.9f;
         bounds.top += sprite.getGlobalBounds().height * 0.1f;
     }

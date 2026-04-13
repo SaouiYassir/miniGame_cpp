@@ -1,7 +1,5 @@
 #include "Obstacle.hpp"
-#include <iostream>
 
-// Static textures
 Texture Obstacle::flyingTexture;
 Texture Obstacle::groundTexture;
 bool Obstacle::texturesChargees = false;
@@ -12,7 +10,7 @@ Obstacle::Obstacle(bool flying, float speed)
     if (!texturesChargees) {
         if (!flyingTexture.loadFromFile("assets/imgs/obstacles/centipede_light_shadow2.png") ||
             !groundTexture.loadFromFile("assets/imgs/obstacles/white_crystal_light_shadow1.png")) {
-            std::cerr << "Erreur : Impossible de charger les textures !" << std::endl;
+            cerr << "Erreur : Impossible de charger les textures !" << endl;
         }
         texturesChargees = true;
     }
@@ -20,14 +18,14 @@ Obstacle::Obstacle(bool flying, float speed)
     if (isFlying) {
         sprite.setTexture(flyingTexture);
 
-        // Flying enemy = head level
+        
         sprite.setPosition(1080.f, 220.f);
         sprite.setScale(1.f, 1.f);
     }
     else {
         sprite.setTexture(groundTexture);
 
-        // Ground enemy = near floor
+        
         sprite.setPosition(1080.f, 330.f);
         sprite.setScale(1.f, 1.f);
     }

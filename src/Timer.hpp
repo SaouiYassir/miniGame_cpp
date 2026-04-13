@@ -3,6 +3,11 @@
 
 #include <SFML/Graphics.hpp>
 #include <string>
+#include <sstream>
+#include <iomanip>
+
+using namespace std;
+using namespace sf;
 
 class Timer {
 private:

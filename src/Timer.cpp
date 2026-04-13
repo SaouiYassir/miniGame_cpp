@@ -2,7 +2,7 @@
 #include <sstream>
 #include <iomanip>
 
-Timer::Timer() : isRunning(false), elapsedTime(sf::Time::Zero) {}
+Timer::Timer() : isRunning(false), elapsedTime(Time::Zero) {}
 
 void Timer::update() {
     if (isRunning) {
@@ -14,14 +14,14 @@ void Timer::update() {
 
 void Timer::pause() { isRunning = false; }
 void Timer::resume() { isRunning = true; }
-void Timer::reset() { elapsedTime = sf::Time::Zero; clock.restart(); }
+void Timer::reset() { elapsedTime = Time::Zero; clock.restart(); }
 
-std::string Timer::getTimeString() const {
+string Timer::getTimeString() const {
     int total = static_cast<int>(elapsedTime.asSeconds());
     int mins = total / 60;
     int secs = total % 60;
-    std::stringstream ss;
-    ss << std::setfill('0') << std::setw(2) << mins << ":" 
-       << std::setfill('0') << std::setw(2) << secs;
+    stringstream ss;
+    ss << setfill('0') << setw(2) << mins << ":" 
+       << setfill('0') << setw(2) << secs;
     return ss.str();
 }
