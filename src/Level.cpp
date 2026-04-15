@@ -1,9 +1,8 @@
 #include "Level.hpp"
-#include <iostream>
 
-sf::Texture Level::tex1;
-sf::Texture Level::tex2;
-sf::Texture Level::tex3;
+Texture Level::tex1;
+Texture Level::tex2;
+Texture Level::tex3;
 bool Level::charge = false;
 
 Level::Level() {
@@ -11,7 +10,7 @@ Level::Level() {
         if (!tex1.loadFromFile("assets/imgs/backgrounds/bamboo bridge.png") ||
             !tex2.loadFromFile("assets/imgs/backgrounds/forest bridge.png") ||
             !tex3.loadFromFile("assets/imgs/backgrounds/sky bridge.png")) {
-            std::cerr << "Erreur de chargement des fonds !" << std::endl;
+            cerr << "Erreur de chargement des fonds !" << endl;
         }
         charge = true;
     }
@@ -32,6 +31,6 @@ void Level::setNiveau(int niveau) {
     sprite.setScale(scaleX, scaleY);
 }
 
-void Level::draw(sf::RenderWindow& window) {
+void Level::draw(RenderWindow& window) {
     window.draw(sprite);
 }

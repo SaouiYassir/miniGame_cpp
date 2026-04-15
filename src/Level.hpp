@@ -4,17 +4,21 @@
 #include <SFML/Graphics.hpp>
 #include <vector>
 #include <string>
+#include <iostream>
+
+using namespace std;
+using namespace sf;
 
 class Level {
 private:
-    sf::Sprite sprite;
-    static sf::Texture tex1, tex2, tex3;
+    Sprite sprite;
+    static Texture tex1, tex2, tex3;
     static bool charge;
 
 public:
     Level();
     void setNiveau(int niveau);
-    void draw(sf::RenderWindow& window);
+    void draw(RenderWindow& window);
 };
 
 #endif

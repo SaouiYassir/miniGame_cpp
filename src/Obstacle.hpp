@@ -9,8 +9,6 @@ using namespace sf;
 
 class Obstacle {
 private:
-    // "static" signifie que la texture appartient à la CLASSE, pas à l'objet.
-    // Elle reste en mémoire tant que le programme tourne.
     static Texture flyingTexture;
     static Texture groundTexture;
     static bool texturesChargees;

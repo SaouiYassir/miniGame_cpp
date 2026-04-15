@@ -1,5 +1,4 @@
 #include "Heart.hpp"
-#include <iostream>
 
 Heart::Heart() {
     health = maxHealth;

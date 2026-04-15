@@ -5,25 +5,27 @@
 #include <string>
 #include <sstream>
 #include <iomanip>
+#include <iostream>
 
 using namespace std;
 using namespace sf;
 
 class Timer {
 private:
-    sf::Clock clock;
-    sf::Time elapsedTime;
-    bool isRunning;
+    Clock clock;
+    float pausedTime;
+    float totalPausedDuration;
+    bool isPaused;
+    float accumulatedTime;
 
 public:
     Timer();
-    void update();
+    void start();
     void pause();
     void resume();
+    float getElapsedTime();
     void reset();
-
-    sf::Time getElapsedTime() const { return elapsedTime; }
-    std::string getTimeString() const;
+    bool getIsPaused() const;
 };
 
 #endif

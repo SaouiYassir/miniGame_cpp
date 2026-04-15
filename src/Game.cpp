@@ -1,7 +1,6 @@
 #include "Game.hpp"
-#include <ctime>
 
-Game::Game() : windowWidth(1080), windowHeight(720), window(VideoMode(1080, 720), "SFML Game"), menu(windowWidth, windowHeight) {
+Game::Game() : windowWidth(1080), windowHeight(720), window(VideoMode(1080, 720), "SFML Game"), menu(windowWidth, windowHeight), gameTimer() {
     window.setFramerateLimit(60);
     state = MENU_STATE;
 
@@ -22,7 +21,6 @@ Game::Game() : windowWidth(1080), windowHeight(720), window(VideoMode(1080, 720)
     centerText.setCharacterSize(100);
     centerText.setStyle(Text::Bold);
 
-    
     if (!backgroundMusic.openFromFile("assets/music/Bonkers-for-Arcades.ogg")) 
         cout << "Error loading background music" << endl;
     if (!gameOverEffect.openFromFile("assets/music/game-over.ogg")) 
@@ -44,12 +42,12 @@ void Game::run() {
 
 void Game::processEvents() {
     Event event;
+
     while (window.pollEvent(event)) {
         if (event.type == Event::Closed)
             window.close();
 
         if (event.type == Event::KeyPressed) {
-            
             if (event.key.code == Keyboard::Escape || event.key.code == Keyboard::P) {
                 if (state == GAMEPLAY_STATE || state == PAUSED_STATE) {
                     togglePause();
@@ -75,13 +73,22 @@ void Game::togglePause() {
     if (state == GAMEPLAY_STATE) {
         state = PAUSED_STATE;
         backgroundMusic.pause();
-        gameTimer.pause();   
+        gameTimer.pause();
     } else if (state == PAUSED_STATE) {
         state = GAMEPLAY_STATE;
         backgroundMusic.play();
-        gameTimer.resume();  
+        gameTimer.resume();
         spawnTimer.restart();
     }
+}
+
+string formatTime(float seconds) {
+    int minutes = static_cast<int>(seconds) / 60;
+    int secs = static_cast<int>(seconds) % 60;
+    stringstream ss;
+    ss << setw(2) << setfill('0') << minutes << ":"
+       << setw(2) << setfill('0') << secs;
+    return ss.str();
 }
 
 void Game::update() {
@@ -90,16 +97,25 @@ void Game::update() {
     }
 }
 
-void Game::updateGameplay() {
-    gameTimer.update();
-    timerText.setString(gameTimer.getTimeString());
+void Game::updateGameplay() {    
+    float secondes = gameTimer.getElapsedTime();
+    
+    timerText.setString(formatTime(secondes));
 
-    float secondes = gameTimer.getElapsedTime().asSeconds();
     int currentLevel = 1;
 
-    if (secondes < 15.f) { currentLevel = 1; vitesseActuelle = 6.5f; }
-    else if (secondes < 30.f) { currentLevel = 2; vitesseActuelle = 10.5f; }
-    else { currentLevel = 3; vitesseActuelle = 15.0f; }
+    if (secondes < 15.f) { 
+        currentLevel = 1; 
+        vitesseActuelle = 6.5f; 
+    }
+    else if (secondes < 30.f) { 
+        currentLevel = 2; 
+        vitesseActuelle = 10.5f; 
+    }
+    else { 
+        currentLevel = 3; 
+        vitesseActuelle = 15.0f; 
+    }
 
     if (currentLevel > lastLevel) {
         showLevelMessage = true;
@@ -124,8 +140,7 @@ void Game::updateGameplay() {
         obstacles[i].update();
 
         FloatRect pBox = player.getBounds();
-        FloatRect playerHitbox(pBox.left + pBox.width * 0.15f, pBox.top + pBox.height * 0.1f, 
-                               pBox.width * 0.7f, pBox.height * 0.8f);
+        FloatRect playerHitbox(pBox.left + pBox.width * 0.15f, pBox.top + pBox.height * 0.1f, pBox.width * 0.7f, pBox.height * 0.8f);
 
         FloatRect oBox = obstacles[i].getBounds();
         if (playerHitbox.intersects(oBox)) {
@@ -164,12 +179,10 @@ void Game::render() {
         renderGameplay();
 
         if (state == PAUSED_STATE) {
-        
             RectangleShape dimmer(Vector2f(windowWidth, windowHeight));
             dimmer.setFillColor(Color(0, 0, 0, 150));
             window.draw(dimmer);
 
-        
             centerText.setString("PAUSED");
             centerText.setFillColor(Color::Yellow);
             FloatRect bounds = centerText.getLocalBounds();

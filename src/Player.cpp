@@ -38,23 +38,23 @@ void Player::handleInput() {
     isCrouching = false;
     float direction = (sprite.getScale().x > 0) ? 1.f : -1.f;
 
-    if (Keyboard::isKeyPressed(Keyboard::D)) {
+    if (Keyboard::isKeyPressed(Keyboard::D) || Keyboard::isKeyPressed(Keyboard::Right)) {
         sprite.move(moveSpeed, 0.f);
-        sprite.setScale(0.25f, 0.25f); // Face Right
+        sprite.setScale(0.25f, 0.25f); 
         isMoving = true;
     } 
-    else if (Keyboard::isKeyPressed(Keyboard::A)) {
+    else if (Keyboard::isKeyPressed(Keyboard::A) || Keyboard::isKeyPressed(Keyboard::Left)) {
         sprite.move(-moveSpeed, 0.f);
-        sprite.setScale(-0.25f, 0.25f); // Face Left
+        sprite.setScale(-0.25f, 0.25f); 
         isMoving = true;
     }
 
-    if (Keyboard::isKeyPressed(Keyboard::Space) && !isJumping) {
+    if ((Keyboard::isKeyPressed(Keyboard::Space) || Keyboard::isKeyPressed(Keyboard::Up)) && !isJumping) {
         isJumping = true;
         velocityY = jumpForce;
     }
 
-    if (Keyboard::isKeyPressed(Keyboard::C) && !isJumping) {
+    if ((Keyboard::isKeyPressed(Keyboard::C) || Keyboard::isKeyPressed(Keyboard::Down)) && !isJumping) {
         isCrouching = true;
         sprite.move(moveSpeed * 1.f * direction, 0.f);
     }
@@ -105,12 +105,10 @@ void Player::render(RenderWindow& window) {
 FloatRect Player::getBounds() const { 
     FloatRect bounds = sprite.getGlobalBounds();
 
-    // 1. RÉDUCTION DE LA LARGEUR (Padding horizontal)
     float widthReduction = bounds.width * 0.4f; 
     bounds.width -= widthReduction;
     bounds.left += widthReduction / 2.0f;
 
-    // 2. LOGIQUE D'ACCROUPISSEMENT ET HAUTEUR
     if (isCrouching) {
         bounds.height *= 0.5f;
         bounds.top += bounds.height; 

@@ -2,7 +2,10 @@
 #define GAME_HPP
 
 #include <SFML/Graphics.hpp>
-#include <SFML/Audio.hpp> // Added for Music
+#include <SFML/Audio.hpp>
+#include <ctime>
+#include <sstream>
+#include <iomanip>
 #include <vector>
 #include <iostream>
 #include "Player.hpp"
@@ -20,7 +23,7 @@ private:
     enum GameState {
         MENU_STATE,
         GAMEPLAY_STATE,
-        PAUSED_STATE,    // New state
+        PAUSED_STATE,   
         ABOUT_STATE,
         GAME_OVER_STATE
     };
@@ -54,12 +57,10 @@ private:
     int lastLevel;
     bool showLevelMessage;
 
-    // Core Logic
     void processEvents();
     void update();
     void render();
 
-    // Specific Logic
     void updateGameplay();
     void renderGameplay();
     void togglePause();

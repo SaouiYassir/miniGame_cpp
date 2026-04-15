@@ -1,25 +1,50 @@
 #include "Timer.hpp"
 
-Timer::Timer() : isRunning(false), elapsedTime(Time::Zero) {}
+Timer::Timer() {
+    pausedTime = 0.0f;
+    totalPausedDuration = 0.0f;
+    isPaused = false;
+    accumulatedTime = 0.0f;
+}
 
-void Timer::update() {
-    if (isRunning) {
-        elapsedTime += clock.restart();
-    } else {
-        clock.restart();
+void Timer::start() {
+    clock.restart();
+    isPaused = false;
+    totalPausedDuration = 0.0f;
+    accumulatedTime = 0.0f;
+}
+
+void Timer::pause() {
+    if (!isPaused) {
+        pausedTime = clock.getElapsedTime().asSeconds();
+        isPaused = true;
     }
 }
 
-void Timer::pause() { isRunning = false; }
-void Timer::resume() { isRunning = true; }
-void Timer::reset() { elapsedTime = Time::Zero; clock.restart(); }
+void Timer::resume() {
+    if (isPaused) {
+        float currentTime = clock.getElapsedTime().asSeconds();
+        float pauseDuration = currentTime - pausedTime;
+        totalPausedDuration += pauseDuration;
+        isPaused = false;
+    }
+}
 
-string Timer::getTimeString() const {
-    int total = static_cast<int>(elapsedTime.asSeconds());
-    int mins = total / 60;
-    int secs = total % 60;
-    stringstream ss;
-    ss << setfill('0') << setw(2) << mins << ":" 
-       << setfill('0') << setw(2) << secs;
-    return ss.str();
+float Timer::getElapsedTime() {
+    if (isPaused) {
+        return pausedTime - totalPausedDuration;
+    } else {
+        return clock.getElapsedTime().asSeconds() - totalPausedDuration;
+    }
+}
+
+void Timer::reset() {
+    clock.restart();
+    isPaused = false;
+    totalPausedDuration = 0.0f;
+    pausedTime = 0.0f;
+}
+
+bool Timer::getIsPaused() const {
+    return isPaused;
 }

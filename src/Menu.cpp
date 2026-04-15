@@ -1,7 +1,4 @@
 #include "Menu.hpp"
-#include <iostream> 
-
-using namespace sf;
 
 Menu::Menu(float width, float height) {
 
@@ -15,15 +12,15 @@ Menu::Menu(float width, float height) {
     float centerY = (screenHeight - buttonHeight) / 2;
 
     if (!font.loadFromFile("assets/fonts/font1.ttf")) {
-        std::cout << "Error loading font" << std::endl;
+        cout << "Error loading font" << endl;
     }
 
     if (!menuTexture.loadFromFile("assets/imgs/backgrounds/menuBackground.png")) {
-        std::cout << "Error loading menu image" << std::endl;
+        cout << "Error loading menu image" << endl;
     }
 
     if (!aboutTexture.loadFromFile("assets/imgs/backgrounds/aboutBackground.png")) {
-        std::cout << "Error loading about image" << std::endl;
+        cout << "Error loading about image" << endl;
     }
 
     // --- PLAY BUTTON ---
