@@ -128,9 +128,9 @@ This project helped improve my understanding of:
 
 ---
 
-## 👨‍💻 Contributors
+## 👨‍💻 Authors
 
-**Yassir Saoui (Author)**  
+**Yassir Saoui**  
 C++ / Game Development / SFML  
 
 - GitHub: https://github.com/SaouiYassir
