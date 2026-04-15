@@ -102,6 +102,10 @@ void Player::render(RenderWindow& window) {
     window.draw(sprite);
 }
 
+void Player::resetPosition() {
+    sprite.setPosition(100.f, groundY);
+}
+
 FloatRect Player::getBounds() const { 
     FloatRect bounds = sprite.getGlobalBounds();
 

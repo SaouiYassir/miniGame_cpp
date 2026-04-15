@@ -17,15 +17,19 @@ private:
     float spacing;
     float xPos;
     float centerY;
+
     Texture menuTexture;
     Sprite menuSprite;
     RectangleShape playButton;
+
     Text playText;
     RectangleShape aboutButton;
     Text aboutText;
+
     Texture aboutTexture;
     Sprite aboutSprite;
     RectangleShape quitButton;
+    
     Text quitText;
     Font font;
 

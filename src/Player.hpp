@@ -39,6 +39,7 @@ public:
     void update();
     void updateAnimation();
     void render(RenderWindow& window);
+    void resetPosition();
     
     FloatRect getBounds() const; 
 };

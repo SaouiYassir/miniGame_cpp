@@ -8,6 +8,7 @@
 #include <iomanip>
 #include <vector>
 #include <iostream>
+#include <cmath> 
 #include "Player.hpp"
 #include "Obstacle.hpp"
 #include "Menu.hpp"
@@ -28,18 +29,20 @@ private:
         GAME_OVER_STATE
     };
 
-    RenderWindow window;
     GameState state;
-
+    
     int windowWidth;
     int windowHeight;
-
+    
+    RenderWindow window;
+    
     Menu menu;
     Player player;
-    vector<Obstacle> obstacles;
     Heart hp;
     Level level;
     Timer gameTimer;
+
+    vector<Obstacle> obstacles;
 
     Clock spawnTimer;
     Clock damageTimer;
@@ -54,6 +57,7 @@ private:
     Music damageEffect;
 
     float vitesseActuelle;
+    float finalGameTime;
     int lastLevel;
     bool showLevelMessage;
 
