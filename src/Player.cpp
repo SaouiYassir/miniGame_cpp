@@ -1,34 +1,29 @@
 #include "Player.hpp"
 
+// Helper function to keep the constructor clean
+void Player::loadFrames(vector<Texture>& container, string path, int count) {
+    container.reserve(count); // Pre-allocate memory
+    for (int i = 0; i < count; i++) {
+        container.emplace_back(); // Create texture directly in the vector
+        if (!container.back().loadFromFile(path + to_string(i) + ".png")) {
+            cout << "Error loading: " << path << i << ".png" << endl;
+        }
+    }
+}
+
 Player::Player() {
-    for (int i = 0; i < 18; i++) {
-        Texture t;
-        if (t.loadFromFile("assets/imgs/Idle/0_Bloody_Alchemist_Idle_" + to_string(i) + ".png")) {
-            idleFrames.push_back(t);
-        }
-    }
-
-    for (int i = 0; i < 12; i++) {
-        Texture t;
-        if (t.loadFromFile("assets/imgs/Running/0_Bloody_Alchemist_Running_" + to_string(i) + ".png")) {
-            runFrames.push_back(t);
-        }
-    }
-
-    for (int i=0; i<6; i++) {
-        Texture t;
-        if (t.loadFromFile("assets/imgs/Sliding/0_Bloody_Alchemist_Sliding_" + to_string(i) + ".png")) {
-            slidingFrames.push_back(t);
-        }
-    }
+    // Load all animations using the helper
+    loadFrames(idleFrames, "assets/imgs/Idle/0_Bloody_Alchemist_Idle_", 18);
+    loadFrames(runFrames, "assets/imgs/Running/0_Bloody_Alchemist_Running_", 12);
+    loadFrames(slidingFrames, "assets/imgs/Sliding/0_Bloody_Alchemist_Sliding_", 6);
 
     if (!idleFrames.empty()) {
         sprite.setTexture(idleFrames[0]);
     }
     
+    // Formatting the sprite
     FloatRect bounds = sprite.getLocalBounds();
     sprite.setOrigin(bounds.width / 2.f, bounds.height / 2.f);
-    
     sprite.setScale(0.25f, 0.25f);
     sprite.setPosition(100.f, groundY);
 }

@@ -21,6 +21,7 @@ Game::Game() : windowWidth(1080), windowHeight(720), window(VideoMode(windowWidt
     centerText.setCharacterSize(100);
     centerText.setStyle(Text::Bold);
 
+    // Uploading the assets needed
     if (!backgroundMusic.openFromFile("assets/music/Bonkers-for-Arcades.ogg")) 
         cout << "Error loading background music" << endl;
     if (!gameOverEffect.openFromFile("assets/music/game-over.ogg")) 
@@ -49,39 +50,43 @@ void Game::processEvents() {
 
         if (event.type == Event::KeyPressed) {
             
+            // Press the Q button when the Game is Paused => Quit
             if (state == PAUSED_STATE && event.key.code == Keyboard::Q) {
                 window.close();
             }
 
-            
-            if ((state == GAMEPLAY_STATE || state == PAUSED_STATE || state == GAME_OVER_STATE) && event.key.code == Keyboard::M) {
+            // Press the M button when the Game is Paused / Over => Back to the Menu                
+            if ((state == PAUSED_STATE || state == GAME_OVER_STATE) && event.key.code == Keyboard::M) {
                 state = MENU_STATE;
                 backgroundMusic.stop();
                 resetGame(); 
             }
 
-            
+            // Press the R button when the Game is Paused => Resume
             if (state == PAUSED_STATE && event.key.code == Keyboard::R) {
                 togglePause();
             }
             
-            
+            // Press the R button when the Game is Over => Restart
             if (state == GAME_OVER_STATE && event.key.code == Keyboard::R) {
                 resetGame();
                 state = GAMEPLAY_STATE;
                 backgroundMusic.play();
             }
 
-            
+            // Press the P button while you Play => Pause the Game
             if (state == GAMEPLAY_STATE && event.key.code == Keyboard::P) {
                 togglePause();
             }
 
-            
+            // Press the Esc button 
             if (event.key.code == Keyboard::Escape) {
+                // while you Play => Pause the Game
                 if (state == GAMEPLAY_STATE) {
                     togglePause();
-                } else if (state == ABOUT_STATE || state == GAME_OVER_STATE) {
+                }
+                // when the Game is Over / About Page => Back to the menu
+                else if (state == ABOUT_STATE || state == GAME_OVER_STATE) {
                     state = MENU_STATE;
                     resetGame(); 
                 }

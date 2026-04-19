@@ -14,6 +14,8 @@ private:
     vector<Texture> idleFrames;
     vector<Texture> runFrames;
     vector<Texture> slidingFrames;
+
+    void loadFrames(std::vector<sf::Texture>& container, std::string path, int count);
     
     int currentFrame = 0;
     Clock animationClock;  
