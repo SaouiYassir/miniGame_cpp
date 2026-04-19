@@ -37,13 +37,14 @@ miniGame_cpp/
 │   └── fonts/
 │
 ├── src/               # Game classes
-│   ├── Player.hpp
-│   ├── Enemy.hpp
-│   ├── Heart.hpp
-│   ├── Timer.hpp
+│   ├── Game.hpp / .cpp
+│   ├── Player.hpp / .cpp
+│   ├── Obstacle.hpp / .cpp
+│   ├── Heart.hpp / .cpp
+│   ├── Timer.hpp / .cpp
 │   └── ...
 │
-├── main.cpp           # Main game loop
+├── main.cpp
 ├── build.sh           # Build script
 └── README.md
 ```
@@ -57,7 +58,8 @@ miniGame_cpp/
 | `A / D` | Move left / right |
 | `Space` | Jump |
 | `C` | Crouch |
-| `Esc` | Pause / Exit |
+| `P` | Pause |
+| `Esc` | Exit |
 
 ---
 
@@ -95,22 +97,6 @@ Make sure you have:
 ```bash
 sudo apt install libsfml-dev
 ```
-
----
-
-## 📸 Gameplay Preview
-
-Add screenshots or GIFs here:
-
-```md
-![Gameplay](assets/preview/gameplay.gif)
-```
-
-Recommended:
-- Main menu screenshot
-- Running animation
-- Sliding mechanic
-- Game over screen
 
 ---
 
