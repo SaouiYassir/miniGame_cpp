@@ -48,42 +48,42 @@ void Game::processEvents() {
             window.close();
 
         if (event.type == Event::KeyPressed) {
-            // Q to quit the entire game when paused
+            
             if (state == PAUSED_STATE && event.key.code == Keyboard::Q) {
                 window.close();
             }
 
-            // M to go back to menu (from gameplay, paused, OR GAME OVER)
+            
             if ((state == GAMEPLAY_STATE || state == PAUSED_STATE || state == GAME_OVER_STATE) && event.key.code == Keyboard::M) {
                 state = MENU_STATE;
                 backgroundMusic.stop();
-                resetGame(); // Reset the game when going to menu
+                resetGame(); 
             }
 
-            // R to resume when paused
+            
             if (state == PAUSED_STATE && event.key.code == Keyboard::R) {
                 togglePause();
             }
             
-            // R to restart when game over
+            
             if (state == GAME_OVER_STATE && event.key.code == Keyboard::R) {
                 resetGame();
                 state = GAMEPLAY_STATE;
                 backgroundMusic.play();
             }
 
-            // P to pause from gameplay
+            
             if (state == GAMEPLAY_STATE && event.key.code == Keyboard::P) {
                 togglePause();
             }
 
-            // ESC: pause from gameplay, or back to menu from about/game over
+            
             if (event.key.code == Keyboard::Escape) {
                 if (state == GAMEPLAY_STATE) {
                     togglePause();
                 } else if (state == ABOUT_STATE || state == GAME_OVER_STATE) {
                     state = MENU_STATE;
-                    resetGame(); // Reset when going back to menu from game over
+                    resetGame(); 
                 }
             }
         }
@@ -93,6 +93,7 @@ void Game::processEvents() {
             if (selection == 1) {
                 resetGame();
                 state = GAMEPLAY_STATE;
+                backgroundMusic.play();
             } else if (selection == 2) {
                 state = ABOUT_STATE;
             }
@@ -130,23 +131,12 @@ void Game::update() {
 
 void Game::updateGameplay() {    
     float secondes = gameTimer.getElapsedTime();
-    
     timerText.setString(formatTime(secondes));
 
     int currentLevel = 1;
-
-    if (secondes < 15.f) { 
-        currentLevel = 1; 
-        vitesseActuelle = 6.5f; 
-    }
-    else if (secondes < 30.f) { 
-        currentLevel = 2; 
-        vitesseActuelle = 10.5f; 
-    }
-    else { 
-        currentLevel = 3; 
-        vitesseActuelle = 15.0f; 
-    }
+    if (secondes < 15.f) { currentLevel = 1; vitesseActuelle = 6.5f; }
+    else if (secondes < 30.f) { currentLevel = 2; vitesseActuelle = 10.5f; }
+    else { currentLevel = 3; vitesseActuelle = 15.0f; }
 
     if (currentLevel > lastLevel) {
         showLevelMessage = true;
@@ -156,9 +146,14 @@ void Game::updateGameplay() {
 
     level.setNiveau(currentLevel);
 
+    
     if (!showLevelMessage) {
         if (spawnTimer.getElapsedTime().asSeconds() > 1.5f) {
-            obstacles.push_back(Obstacle(rand() % 2 == 0, vitesseActuelle));
+            if (rand() % 2 == 0) {
+                obstacles.push_back(new GroundObstacle(vitesseActuelle));
+            } else {
+                obstacles.push_back(new FlyingObstacle(vitesseActuelle));
+            }
             spawnTimer.restart();
         }
     } else {
@@ -167,13 +162,14 @@ void Game::updateGameplay() {
 
     player.update();
 
+    
     for (size_t i = 0; i < obstacles.size(); i++) {
-        obstacles[i].update();
+        obstacles[i]->update(); 
 
         FloatRect pBox = player.getBounds();
         FloatRect playerHitbox(pBox.left + pBox.width * 0.15f, pBox.top + pBox.height * 0.1f, pBox.width * 0.7f, pBox.height * 0.8f);
 
-        FloatRect oBox = obstacles[i].getBounds();
+        FloatRect oBox = obstacles[i]->getBounds();
         if (playerHitbox.intersects(oBox)) {
             if (damageTimer.getElapsedTime().asSeconds() > 1.0f) {
                 hp.hit();
@@ -188,8 +184,10 @@ void Game::updateGameplay() {
             }
         }
 
-        if (obstacles[i].getBounds().left + obstacles[i].getBounds().width < 0) {
-            obstacles.erase(obstacles.begin() + i);
+        
+        if (obstacles[i]->getBounds().left + obstacles[i]->getBounds().width < 0) {
+            delete obstacles[i]; 
+            obstacles.erase(obstacles.begin() + i); 
             i--;
         }
     }
@@ -249,7 +247,7 @@ void Game::render() {
         centerText.setPosition(windowWidth/2.f, windowHeight/2.f - 80);
         window.draw(centerText);
         
-        // Add restart instructions
+        
         Text restartText;
         restartText.setString("Press [ R ] to Restart  |  [ M ] for Menu  |  [ ESC ] to Menu");
         restartText.setFont(font);
@@ -260,9 +258,9 @@ void Game::render() {
         restartText.setPosition(windowWidth/2.f, windowHeight/2.f + 20);
         window.draw(restartText);
         
-        // Show final time - USE THE STORED TIME
+        
         Text finalTimeText;
-        finalTimeText.setString("Time survived: " + formatTime(finalGameTime));  // Changed to finalGameTime
+        finalTimeText.setString("Time survived: " + formatTime(finalGameTime));  
         finalTimeText.setFont(font);
         finalTimeText.setFillColor(Color::Yellow);
         finalTimeText.setCharacterSize(28);
@@ -278,7 +276,12 @@ void Game::render() {
 void Game::renderGameplay() {
     level.draw(window);
     player.render(window);
-    for (auto& o : obstacles) o.render(window);
+    
+    
+    for (auto* o : obstacles) {
+        o->render(window);
+    }
+    
     hp.draw(window);
     window.draw(timerText);
 
@@ -293,7 +296,13 @@ void Game::renderGameplay() {
 }
 
 void Game::resetGame() {
+    
+    for (auto* obs : obstacles) {
+        delete obs;
+    }
+    
     obstacles.clear();
+
     spawnTimer.restart();
     gameTimer.reset();
     gameTimer.resume();
@@ -305,4 +314,8 @@ void Game::resetGame() {
     damageTimer.restart(); 
     finalGameTime = 0;
     player.resetPosition();
+}
+
+Game::~Game() {
+    for (auto* obs : obstacles) delete obs;
 }

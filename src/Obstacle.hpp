@@ -3,26 +3,23 @@
 
 #include <SFML/Graphics.hpp>
 #include <iostream>
-
 using namespace std;
 using namespace sf;
 
 class Obstacle {
-private:
-    static Texture flyingTexture;
-    static Texture groundTexture;
-    static bool texturesChargees;
-    bool isFlying;
-
-    Sprite sprite;   
-    float vitesse;            
+protected:
+    Sprite sprite;
+    float vitesse;
 
 public:
-    Obstacle(bool, float);
-    void update();
+    Obstacle(float v);
+    virtual ~Obstacle(); 
+
+    virtual void update();
     void render(RenderWindow& window);
     FloatRect getBounds() const;
-    bool getIsFlying() const;
+    
+    virtual bool getIsFlying() const = 0; 
 };
 
 #endif

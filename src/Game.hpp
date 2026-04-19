@@ -15,6 +15,8 @@
 #include "Timer.hpp"
 #include "Level.hpp"
 #include "Heart.hpp"
+#include "FlyingObstacle.hpp" 
+#include "GroundObstacle.hpp"
 
 using namespace sf;
 using namespace std;
@@ -42,7 +44,7 @@ private:
     Level level;
     Timer gameTimer;
 
-    vector<Obstacle> obstacles;
+    vector<Obstacle*> obstacles;
 
     Clock spawnTimer;
     Clock damageTimer;
@@ -72,6 +74,7 @@ private:
 
 public:
     Game();
+    ~Game();
     void run();
 };
 
