@@ -10,14 +10,16 @@ Game::Game() : windowWidth(1080), windowHeight(720), window(VideoMode(windowWidt
     lastLevel = 1;
     showLevelMessage = false;
 
-    font.loadFromFile("assets/fonts/font1.ttf");
+    font1.loadFromFile("assets/fonts/font.ttf");
+    font2.loadFromFile("assets/fonts/Creepster-Regular.ttf");
+    font3.loadFromFile("assets/fonts/Bungee-Regular.ttf");
 
-    timerText.setFont(font);
+    timerText.setFont(font1);
     timerText.setCharacterSize(30);
     timerText.setFillColor(Color::White);
     timerText.setPosition(windowWidth - 200, 20);
 
-    centerText.setFont(font);
+    centerText.setFont(font2);
     centerText.setCharacterSize(100);
     centerText.setStyle(Text::Bold);
 
@@ -230,7 +232,7 @@ void Game::render() {
 
             Text subText;
             subText.setString("Press [ R ] to resume  |  [ Q ] to quit  |  [ M ] to go to Menu");
-            subText.setFont(font);
+            subText.setFont(font3);
             subText.setFillColor(Color(200, 200, 200, 200));
             subText.setCharacterSize(20);
             bounds = subText.getLocalBounds();
@@ -255,7 +257,7 @@ void Game::render() {
         
         Text restartText;
         restartText.setString("Press [ R ] to Restart  |  [ M ] for Menu  |  [ ESC ] to Menu");
-        restartText.setFont(font);
+        restartText.setFont(font3);
         restartText.setFillColor(Color(200, 200, 200));
         restartText.setCharacterSize(24);
         bounds = restartText.getLocalBounds();
@@ -266,7 +268,7 @@ void Game::render() {
         
         Text finalTimeText;
         finalTimeText.setString("Time survived: " + formatTime(finalGameTime));  
-        finalTimeText.setFont(font);
+        finalTimeText.setFont(font3);
         finalTimeText.setFillColor(Color::Yellow);
         finalTimeText.setCharacterSize(28);
         bounds = finalTimeText.getLocalBounds();

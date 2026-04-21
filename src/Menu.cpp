@@ -11,7 +11,7 @@ Menu::Menu(float width, float height) {
     float xPos = (screenWidth - buttonWidth) / 2;
     float centerY = (screenHeight - buttonHeight) / 2;
 
-    if (!font.loadFromFile("assets/fonts/font1.ttf")) {
+    if (!font.loadFromFile("assets/fonts/font.ttf")) {
         cout << "Error loading font" << endl;
     }
 

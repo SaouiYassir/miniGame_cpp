@@ -50,7 +50,7 @@ private:
     Clock damageTimer;
     Clock levelDisplayTimer;
 
-    Font font;
+    Font font1, font2, font3;
     Text timerText;
     Text centerText;
 
